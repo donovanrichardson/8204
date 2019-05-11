@@ -20,10 +20,32 @@ with open('/Users/donovanrichardson/Dropbox/8055/haquathon/frq.csv', newline = '
     reader = csv.reader(freq, delimiter = ',')
     for row in reader:
         kissuv.append(row)
-    kissuv = kissuv[1:]
-    for r in kissuv:
-        r[1] = int(r[1])
-    print(kissuv)
-    for r in kissuv:
-        freaks.append(LitFrq(r[0],r[1]))
+kissuv = kissuv[1:]
+for r in kissuv:
+    r[1] = int(r[1])
+print(kissuv)
+for r in kissuv:
+    freaks.append(LitFrq(r[0],r[1]))
+
+s = sorted(freaks, key =lambda lf: lf.frq)
+
+def printsort(lyst):
+    for item in lyst:
+        print(lyst.index(item), item)
+
+printsort(s)
+
+def makesort(lyst):
+    lyst = sorted(lyst, key =lambda lf: lf.frq)
+    for item in lyst:
+        print(lyst.index(item), item)
+    return lyst
+
+def mergepops(hi, lo):
+    global s
+    s[hi].mrg(s[lo])
+    s.pop(lo)
+    s = makesort(s)
+
+
 
