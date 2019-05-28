@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>STRAIGHT LINES</title>
+        <meta name="description" content="What would happen if you just tried to walk in a straight line for a long time?">
+<!--        <link rel="stylesheet" href="straightlines.css">-->
+        <link rel="stylesheet"
+              href="leaflet.css"/>
+        <style>
+            #themap { 
+                position: absolute;
+                top:0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        </style>
+        <script src="leaflet-src.js"></script>
+        <script src="straightlines.js"></script> 
+<!--               straightlines source not done-->
+        
+
+    </head>
+    
+    <body>
+
+        <!--        centred-->
+        <h1>STRAIGHT LINES</h1> 
+
+
+
+        <p>
+            <strong><em>
+                Sometimes you just need to go somewhere.
+                </em></strong>
+
+            <br>
+            Not necessarily anywhere in particular. Say it's nice outside, and you want to explore a bit. You need to take a walk. You don't want to get lost. Naturally, you'll want to go in as straight a line as possible, so that you don't get confused about all the turns you make.
+            <br>
+        </p>
+        <p id=sl>
+            Enter STRAIGHT LINES.
+        </p>
+        <p> With STRAIGHT LINES,
+<!--             wow remember to put vertical lines on the side of the text element or whatever--> you can pick a spot anywhere on Earth, and with the power of OpenStreetMap, you can get a path that you can travel on the road by foot, as straight as possible for as long as possible. So now you can plan your straight-line trip without anxiety. More options to come.
+        </p>
+        
+<!--        <iframe width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=-85.79635620117189%2C38.19960837048767%2C-85.67962646484376%2C38.28400803890272&amp;layer=mapnik&amp;marker=38.241820452348264%2C-85.73799133300781" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?mlat=38.2418&amp;mlon=-85.7380#map=13/38.2418/-85.7380">View Larger Map</a></small>-->
+        
+        <div id="themap"></div>
+        <script>
+            var mymap = L.map('themap').setView([51.505, -0.09], 13);
+            
+            L.tileLayer('https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=drAwO6h6sH9OzaRb5IS3' {
+                        attribution:'<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>'
+                        }).addTo(mymap);
+        </script>
+
+
+    </body>
+    
+</html>

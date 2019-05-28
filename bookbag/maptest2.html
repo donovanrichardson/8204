@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        <title>Quick Start - Leaflet</title>
+
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+        <link rel="stylesheet" href="leaflet.css">
+        <script src="leaflet-src.js"></script>
+
+        <style>
+            #themap { 
+                position: absolute;
+                top:0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        </style>
+
+
+    </head>
+    <body>
+        <div id="themap"></div>
+        <!--    <div id="mapid" style="width: 600px; height: 400px;"></div>-->
+        <script>
+
+            var mymap = L.map('themap').setView([42.355, -71.07], 14);
+
+            L.tileLayer('https://api.maptiler.com/maps/basic/256/{z}/{x}/{y}.png?key=drAwO6h6sH9OzaRb5IS3', {
+                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">© MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap contributors</a>',
+                id: 'mapbox.streets'
+            }).addTo(mymap);
+
+        </script>
+
+
+
+    </body>
+</html>
