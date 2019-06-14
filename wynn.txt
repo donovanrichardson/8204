@@ -1,0 +1,18 @@
+<meta charset="UTF-8"/>
+<title>Wynn - Wikipedia</title>
+<link rel="canonical" href="https://en.wikipedia.org/wiki/Wynn"/>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-0 ns-subject mw-editable page-Wynn rootpage-Wynn skin-vector action-view"></body>
+<h1 id="firstHeading" class="firstHeading" lang="en">Wynn</h1>
+<div id="bodyContent" class="mw-body-content"></div>
+<a></a>
+<b></b>
+
+<([^/]*?)>
+<(/[^/]*?)>
+
+<([^/>]*?)><(/[^/]*?)>
+<([^/>]*?)><(/\1*?)>
+<([^/]*?)>(.*?)</\1>
+<([^/>]*?)>(.*?)</\1>
+
+(.)\1
