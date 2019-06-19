@@ -53,5 +53,22 @@ public class TextAnal {
                 handler.addDoc(s);
             }
         }
+        if (args[0].equals("w")){
+            int i;
+            String user = args[1];
+            String password = args[2]; //TODO haha refactor this bc it repeats
+            String url = "jdbc:mysql://localhost/lexicon?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+            Connection conn = DriverManager.getConnection(url, user, password); //SQLException
+            TextHandler handler = new TextHandler(conn);
+            try{
+               i = Integer.valueOf(args[1]);
+               for(int j = 0; j < i; j++){
+                   handler.attemptRandom(); //TODO TEST THIS. This has the wikihavior as well as the doc duplication checking
+               }
+            }catch(NumberFormatException n){
+                System.out.println("The second argument was not a valid number.");
+                break;
+            }
+        }
     }
 }

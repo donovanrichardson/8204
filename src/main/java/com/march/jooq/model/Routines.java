@@ -5,6 +5,7 @@ package com.march.jooq.model;
 
 
 import com.march.jooq.model.routines.AddContinuance;
+import com.march.jooq.model.routines.DocAdd;
 import com.march.jooq.model.routines.Kotoba;
 import com.march.jooq.model.routines.TranslateToFakese;
 import com.march.jooq.model.routines.TranslateToNoves;
@@ -34,6 +35,16 @@ public class Routines {
     public static void addContinuance(Configuration configuration, String item) {
         AddContinuance p = new AddContinuance();
         p.setItem(item);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>lexicon.doc_add</code>
+     */
+    public static void docAdd(Configuration configuration, String newDoc) {
+        DocAdd p = new DocAdd();
+        p.setNewDoc(newDoc);
 
         p.execute(configuration);
     }

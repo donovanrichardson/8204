@@ -1,7 +1,9 @@
 package app.texthandler;
 
+import com.march.jooq.model.Routines;
 import com.march.jooq.model.Tables;
 import com.march.jooq.model.routines.AddContinuance;
+import com.march.jooq.model.routines.DocAdd;
 import com.march.jooq.model.routines.Kotoba;
 import com.march.jooq.model.routines.WordAdd;
 import com.march.jooq.model.tables.records.TextstringRecord;
@@ -39,7 +41,15 @@ public class TextHandler {
      */
     public void newDoc(String title) {
 
-        this.d.insertInto(DOCS, DOCS.DOC_NAME).values(title).execute();
+        /*TODO change this to procedure from new schema
+        1: insertInto will now be a procedure
+        2: this will no longer be void because it will return the result of a select statement in the procedure, which the program will use to track how many documents are added.
+         */
+
+        //TODO idk why im writing this here, but the main function can have a method which calls this repeatedly a number of times. like 30,000 times.
+        Routines.docAdd(this.f, title);
+        //TODO at some point I would just like to make sure that I won't fail if a title is longer than 256, even though that is vv unlikely
+        //TODO also, I want to make a table that connects doc titles to wiki revision ids. Actually, the primary key for docs must be a combo of doc_name and revision id. I want this from the beginning because I don't want the rev id to be a mystery if I implement it later.
 
     }
 
@@ -53,9 +63,7 @@ public class TextHandler {
             this.addWord(beginning);
             this.addContinuance(theWord.substring(100));
         }else {
-            Kotoba add = new Kotoba();
-            add.setOneWord(theWord);
-            add.execute(this.f);
+            Routines.kotoba(this.f, theWord);
         }
     }
 
@@ -69,9 +77,7 @@ public class TextHandler {
             this.addContinuance(middle);
             this.addContinuance(substring.substring(100));
         } else {
-            AddContinuance cntn = new AddContinuance();
-            cntn.setItem(substring);
-            cntn.execute(this.f);
+            Routines.addContinuance(this.f, substring);
         }
     }
 

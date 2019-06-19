@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Docs extends TableImpl<DocsRecord> {
 
-    private static final long serialVersionUID = 840247041;
+    private static final long serialVersionUID = 404904541;
 
     /**
      * The reference instance of <code>lexicon.docs</code>
@@ -64,7 +64,12 @@ public class Docs extends TableImpl<DocsRecord> {
     /**
      * The column <code>lexicon.docs.doc_name</code>.
      */
-    public final TableField<DocsRecord, String> DOC_NAME = createField("doc_name", org.jooq.impl.SQLDataType.VARCHAR(100).nullable(false), this, "");
+    public final TableField<DocsRecord, String> DOC_NAME = createField("doc_name", org.jooq.impl.SQLDataType.VARCHAR(256), this, "");
+
+    /**
+     * The column <code>lexicon.docs.sightings</code>.
+     */
+    public final TableField<DocsRecord, Integer> SIGHTINGS = createField("sightings", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.INTEGER)), this, "");
 
     /**
      * Create a <code>lexicon.docs</code> table reference
