@@ -51,7 +51,7 @@ public class Keys {
     // -------------------------------------------------------------------------
 
     public static final UniqueKey<DocsRecord> KEY_DOCS_PRIMARY = UniqueKeys0.KEY_DOCS_PRIMARY;
-    public static final UniqueKey<DocsRecord> KEY_DOCS_DOC_NAME = UniqueKeys0.KEY_DOCS_DOC_NAME;
+    public static final UniqueKey<DocsRecord> KEY_DOCS_DOC_REV = UniqueKeys0.KEY_DOCS_DOC_REV;
     public static final UniqueKey<LangsRecord> KEY_LANGS_PRIMARY = UniqueKeys0.KEY_LANGS_PRIMARY;
     public static final UniqueKey<LangsRecord> KEY_LANGS_LANG_NAME = UniqueKeys0.KEY_LANGS_LANG_NAME;
     public static final UniqueKey<TextstringRecord> KEY_TEXTSTRING_PRIMARY = UniqueKeys0.KEY_TEXTSTRING_PRIMARY;
@@ -80,7 +80,7 @@ public class Keys {
 
     private static class UniqueKeys0 {
         public static final UniqueKey<DocsRecord> KEY_DOCS_PRIMARY = Internal.createUniqueKey(Docs.DOCS, "KEY_docs_PRIMARY", Docs.DOCS.DOC_ID);
-        public static final UniqueKey<DocsRecord> KEY_DOCS_DOC_NAME = Internal.createUniqueKey(Docs.DOCS, "KEY_docs_doc_name", Docs.DOCS.DOC_NAME);
+        public static final UniqueKey<DocsRecord> KEY_DOCS_DOC_REV = Internal.createUniqueKey(Docs.DOCS, "KEY_docs_doc_rev", Docs.DOCS.DOC_NAME, Docs.DOCS.REVISION);
         public static final UniqueKey<LangsRecord> KEY_LANGS_PRIMARY = Internal.createUniqueKey(Langs.LANGS, "KEY_langs_PRIMARY", Langs.LANGS.LANG_ID);
         public static final UniqueKey<LangsRecord> KEY_LANGS_LANG_NAME = Internal.createUniqueKey(Langs.LANGS, "KEY_langs_lang_name", Langs.LANGS.LANG_NAME);
         public static final UniqueKey<TextstringRecord> KEY_TEXTSTRING_PRIMARY = Internal.createUniqueKey(Textstring.TEXTSTRING, "KEY_textstring_PRIMARY", Textstring.TEXTSTRING.WORD_ID);

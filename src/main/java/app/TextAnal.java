@@ -67,7 +67,6 @@ public class TextAnal {
                }
             }catch(NumberFormatException n){
                 System.out.println("The second argument was not a valid number.");
-                break;
             }
         }
     }

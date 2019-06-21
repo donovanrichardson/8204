@@ -41,7 +41,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Docs extends TableImpl<DocsRecord> {
 
-    private static final long serialVersionUID = 404904541;
+    private static final long serialVersionUID = 1257794766;
 
     /**
      * The reference instance of <code>lexicon.docs</code>
@@ -70,6 +70,11 @@ public class Docs extends TableImpl<DocsRecord> {
      * The column <code>lexicon.docs.sightings</code>.
      */
     public final TableField<DocsRecord, Integer> SIGHTINGS = createField("sightings", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.INTEGER)), this, "");
+
+    /**
+     * The column <code>lexicon.docs.revision</code>.
+     */
+    public final TableField<DocsRecord, Long> REVISION = createField("revision", org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.BIGINT)), this, "");
 
     /**
      * Create a <code>lexicon.docs</code> table reference
@@ -117,7 +122,7 @@ public class Docs extends TableImpl<DocsRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.DOCS_DOC_NAME, Indexes.DOCS_PRIMARY);
+        return Arrays.<Index>asList(Indexes.DOCS_DOC_REV, Indexes.DOCS_PRIMARY);
     }
 
     /**
@@ -141,7 +146,7 @@ public class Docs extends TableImpl<DocsRecord> {
      */
     @Override
     public List<UniqueKey<DocsRecord>> getKeys() {
-        return Arrays.<UniqueKey<DocsRecord>>asList(Keys.KEY_DOCS_PRIMARY, Keys.KEY_DOCS_DOC_NAME);
+        return Arrays.<UniqueKey<DocsRecord>>asList(Keys.KEY_DOCS_PRIMARY, Keys.KEY_DOCS_DOC_REV);
     }
 
     /**

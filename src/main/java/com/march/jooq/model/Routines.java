@@ -7,6 +7,7 @@ package com.march.jooq.model;
 import com.march.jooq.model.routines.AddContinuance;
 import com.march.jooq.model.routines.DocAdd;
 import com.march.jooq.model.routines.Kotoba;
+import com.march.jooq.model.routines.RevDocAdd;
 import com.march.jooq.model.routines.TranslateToFakese;
 import com.march.jooq.model.routines.TranslateToNoves;
 import com.march.jooq.model.routines.WordAdd;
@@ -55,6 +56,17 @@ public class Routines {
     public static void kotoba(Configuration configuration, String oneWord) {
         Kotoba p = new Kotoba();
         p.setOneWord(oneWord);
+
+        p.execute(configuration);
+    }
+
+    /**
+     * Call <code>lexicon.rev_doc_add</code>
+     */
+    public static void revDocAdd(Configuration configuration, String newDoc, Long rev) {
+        RevDocAdd p = new RevDocAdd();
+        p.setNewDoc(newDoc);
+        p.setRev(rev);
 
         p.execute(configuration);
     }

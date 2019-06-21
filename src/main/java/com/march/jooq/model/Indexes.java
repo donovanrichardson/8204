@@ -34,7 +34,7 @@ public class Indexes {
     // INDEX definitions
     // -------------------------------------------------------------------------
 
-    public static final Index DOCS_DOC_NAME = Indexes0.DOCS_DOC_NAME;
+    public static final Index DOCS_DOC_REV = Indexes0.DOCS_DOC_REV;
     public static final Index DOCS_PRIMARY = Indexes0.DOCS_PRIMARY;
     public static final Index LANGS_LANG_NAME = Indexes0.LANGS_LANG_NAME;
     public static final Index LANGS_PRIMARY = Indexes0.LANGS_PRIMARY;
@@ -51,7 +51,7 @@ public class Indexes {
     // -------------------------------------------------------------------------
 
     private static class Indexes0 {
-        public static Index DOCS_DOC_NAME = Internal.createIndex("doc_name", Docs.DOCS, new OrderField[] { Docs.DOCS.DOC_NAME }, true);
+        public static Index DOCS_DOC_REV = Internal.createIndex("doc_rev", Docs.DOCS, new OrderField[] { Docs.DOCS.DOC_NAME, Docs.DOCS.REVISION }, true);
         public static Index DOCS_PRIMARY = Internal.createIndex("PRIMARY", Docs.DOCS, new OrderField[] { Docs.DOCS.DOC_ID }, true);
         public static Index LANGS_LANG_NAME = Internal.createIndex("lang_name", Langs.LANGS, new OrderField[] { Langs.LANGS.LANG_NAME }, true);
         public static Index LANGS_PRIMARY = Internal.createIndex("PRIMARY", Langs.LANGS, new OrderField[] { Langs.LANGS.LANG_ID }, true);
