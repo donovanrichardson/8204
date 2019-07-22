@@ -122,17 +122,21 @@ $(document).ready(function () {
 <div class="fluid-row" id="header">
 
 
-
+<h4><a href='index.html'> Homepage </a></h4>
+<h6>(Apologies for the suddenly different page design)</h6>
+<br>
 <h1 class="title toc-ignore">Candidates</h1>
 <!--<h3 class="subtitle"><em>July 18, 2019</em></h3>-->
 <h4 class="author"><em>Donovan Richardson</em></h4>
-<h6>Apologies for the suddenly different formatting</h6>
+
+
+
 
 </div>
 
 
 <p>How can one become an informed voter? Through text analysis! Maybe….</p>
-<p>A little while back I was making a MySQL schema that would allow me to perform analysis on corpora of text, such as Wikipedia articles. Before scraping data en masse from the web, the first Democratic debates were televised, and I realized that the schema, along with some stored procedures some Java code, could allow me to distill each candidate’s <em>true and complete essence</em>.</p>
+<p>A little while back I was making a MySQL databese schema that would allow me to perform analysis on corpora of text, such as Wikipedia articles. Then the June Democratic debates come, and I realize that by importing each candidate's articles into a database and running some analysis, I could distill each candidate's <em>true and complete essence</em>.</p>
 <p>A little on the schema. There are three main tables: docs, words, and textstring. The docs table lets me associate text with a document, words identifies each word uniquely, and textstring records all words from all documents in order, as in a long scroll.</p>
 <p>The docs table contains three columns that are relevant here: doc_id, doc_name, and purpose. The first two columns are relatively self-explanatory; “purpose” allows me to perform operations on subsets of the text contained in the database. The data of concern for this project is labeled with the purpose “democrats”</p>
 <pre class="r"><code>load(&quot;data2.RData&quot;)
@@ -164,7 +168,7 @@ docs</code></pre>
   </script>
 </div>
 <p>That’s the gist of the schema.</p>
-<p>In order to capture each candidate’s <em>true essence</em> from the Wikipedia articles, I used a text analysis method called <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">tf-idf</a>. Basically, tf-idf is a way to score words for importance in a set of documents. For each unique word in each document a score is assigned, though unique words will receive different scores across documents. Within a document, words that appear many times will be scored higher than words that appear only once or twice. Also, words that appear in few other documents in the set will receive a higher score than those that appear in many other documents. The result of this method is that the words in each document which have the highest tf-idf score will be those that are most germane to that document (i.e. captures the document’s <em>true essence</em>).</p>
+<p>In order to capture each candidate’s <em>true essence</em> from the Wikipedia articles, I used a text analysis method called <a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf">tf-idf</a>. Basically, tf-idf is a way to score words for importance in a set of documents. For each unique word in each document a score is assigned, though unique words will receive different scores across documents. Within a document, words that appear many times will be scored higher than words that appear only once or twice. Also, words that appear in few other documents in the set will receive a higher score than those that appear in many other documents. The result of this method is that the words in each document which have the highest tf-idf score will be those that are theoretically most germane to that document (i.e. captures the document’s <em>true essence</em>).</p>
 <p>With that Java program I mentioned before, I was able to make CSVs listing the tf-idf scores of each unique word in the candidates’ Wikipedia articles <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, comparing the articles with each other for the document frequency measure. If you look in the HTML of the articles, you’ll be able to see that I used all the content within the &lt;div&gt; identified as “mw-content-text”. Regrettably, this included the references for each of the articles, something I’ll make sure to exclude in the future. Anyway, the CSVs are the actual fun part, for those who consider text analysis to be fun. Finally, each candidate can be distilled into their respective one-liners <a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> !</p>
 <p>I only ran tf-idf for the twenty candidates who took the stage in June, assuming that the other candidates are goners. Already one of these twenty, Rep. Eric Swalwell, has pulled the plug on his campaign.</p>
 <pre class="r"><code>`Eric Swalwell-904026811-democrats.csv`[1:100,c(1:2,5)]</code></pre>
@@ -219,7 +223,7 @@ docs</code></pre>
   </script>
 </div>
 <p>Interestingly, “Democratic” appears in Bernie’s top ten list. It’s likely that each of these twenty articles contains the word “Democratic” as in the “Democratic Party.” Accordingly, that Bernie Sanders self-identifies as a democratic socialist seems to demand special importance and a high tf-idf score for the word “democratic” in this article, despite its ubiquity in the others.</p>
-<p>Below are the rest of the tf-idf tables for the candidates, truncated to 100 rows (the full tables range in size from about 2,000 to over 4,000 rows). One thing to note: each of the six women here had “she” or “her” in their top ten tf-idf scored words. Of the men, none had “he” or “him” in their top ten.</p>
+<p>Below are the rest of the tf-idf tables for the candidates, truncated to 100 rows (the full tables range in size from about 2,000 to over 4,000 rows). One thing to note: articles for each of the six women here had “she” or “her” in their top ten tf-idf scored words. Among the men, none had “he” or “him” in their top ten.</p>
 <pre class="r"><code># folder &lt;- &quot;/Users/donovanrichardson/Dropbox/8055/JLexicon/democrats-dir&quot;
 # file_list &lt;- list.files(path=folder, pattern=&quot;*.csv&quot;) 
 # for (i in 1:length(file_list)){
