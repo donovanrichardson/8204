@@ -10,18 +10,18 @@ require(xml2) #read_html
 NamesRevsPurps <- function(url, purpose){#url is a OneTab url that has all the wikipedia links. purpose is a string that will go to the purpose column in MySQL for each document represented by the links in the OneTab url. In next iteration I will make it so that you can use any list of links in HTML, or any list of links.
   
   revs <- function(name, lang){ #GET requires httr
-    request<-GET(paste0("https://", lang, ".wikipedia.org/w/api.php?action=query&prop=revisions&titles=",name,"&rvprop=ids&format=xml"))
-    parsedReq<-xmlParse(content(request,"text"))
-    revresult <- xpathSApply(parsedReq,"string(//rev/@revid)")
+    request<-GET(paste0("https://", lang, ".wikipedia.org/w/api.php?action=query&prop=revisions&titles=",name,"&rvprop=ids&format=xml")) #gets the wiki page
+    parsedReq<-xmlParse(content(request,"text")) #xml
+    revresult <- xpathSApply(parsedReq,"string(//rev/@revid)") #gets the rev number
     revresult
   }
   
-  request <- GET(url)
-  rawcontent <- htmlParse(content(request,"text"))
+  request <- GET(url) #requests list of links page
+  rawcontent <- htmlParse(content(request,"text")) #gets the html of page
   #above two lines can be simplified to read_html i think???
-  linkFormat<-xpathSApply(rawcontent, "//a/@href")[c(-1,-2)]
-  names<-gsub("h.*?i/([^/]*?)$","\\1",linkFormat)
-  langs <- gsub("h.*?//(.*?)[.]wiki.*","\\1",linkFormat)
+  linkFormat<-xpathSApply(rawcontent, "//a/@href")[c(-1,-2)] #gets links
+  names<-gsub("h.*?i/([^/]*?)$","\\1",linkFormat) #gets wikipage names #please the names have to not be random html characters. use the api please #this involves getting the random page xpath for each locale #lol put that in schema too
+  langs <- gsub("h.*?//(.*?)[.]wiki.*","\\1",linkFormat) #gets wikipage langs
   revisions<-vector()
   for (i in 1:length(names)){
     revisions[i] <- revs(names[i], langs[i])
@@ -29,109 +29,121 @@ NamesRevsPurps <- function(url, purpose){#url is a OneTab url that has all the w
   nameslangs <- cbind(names,revisions,langs,purpose)
   dfnamlang<- data.frame(nameslangs)
   rownames(dfnamlang)<-c()
-  print(dfnamlang)
-  View(dfnamlang)
-
-  # dnames$revisions <- revisions
-  # dnames$purpose <- purpose
-  # dnames
-  # print(dnames)
-  # print(dnames$langs)
-} #ok, now time to process the df with other functions
-
-wikiProcess <- function(oldid){#oldid must be a char
-  wikiquest <- read_html(paste0("https://en.wikipedia.org/w/index.php?oldid=",oldid))#rvest
-  wikipage <- htmlParse(wikiquest)#xml
-  wikidesired <- xpathSApply(wikipage, "//div[@class='mw-parser-output']/*[count(following-sibling::h2//span[.='References'])>0]",toString.XMLNode) #this doesn't work for all pages #possibly it works for all pages unless they're linked to a section, in which case the workflow probably failed upstream.
-  info<-tolower(htm2txt(wikidesired))#htm2text
-  paste(info, collapse=" ")
+  dfnamlang
 }
 
-continuance<- function(charvector){#not sure how passing vars works in r but i wasnt able to correctly access the "global" variables residing in the outer function def from the inner function def
-  print(c(charvector[1:10],"...",charvector[(length(charvector)-9):(length(charvector))]))
+wikiProcess <- function(oldid, lang, db){#oldid must be a char
+  wikiquest <- read_html(sprintf("https://%s.wikipedia.org/w/index.php?oldid=%s",lang,oldid))#rvest #request page
+  wikipage <- htmlParse(wikiquest)#xml #gets html content of wikipage
+  wikiContent <- "" #placeholder
+  xPathIndex <- 1 #decides which row will be taken for xpath
+  xPathMax <- 100 #actually it equals the number of xpaths in the schema for the lang #this function needs db
+  while (wikiContent == "" & xPathIndex <= xPathMax){
+    wikiXPath <- #NEED DB CONNECTION where xpaths can be obtained#the xPathIndex is used here
+    wikidesired <- xpathSApply(wikipage, wikiXPath ,toString.XMLNode)
+    wikiContent<-tolower(htm2txt(wikidesired))#htm2text #lowercase formatting
+  }
+  if (wikiContent == ""){ #throughout this function, is it better to say if string size is 0?
+    stop("xpath") #provides error for correct handling in later function
+    #the rest of the function is not executed in this case
+  }
+  paste(wikiContent, collapse=" ") 
+}
+
+continuance<- function(charvector){
+  print(c(charvector[1:10],"...",charvector[(length(charvector)-9):(length(charvector))]))#prints first ten and alast ten characters in the charvector
   addUnder100<- function(longChar, dataf, lc=0){
     if(nchar(longChar) > 100){
-      dataf <- rbind(dataf,data.frame(word = substring(longChar, 1, 100), RC = 1, LC = lc))
+      dataf <- rbind(dataf,data.frame(word = substring(longChar, 1, 100), RC = 1, LC = lc)) #if this word is >100 characters, adds row with RC=true (signifying more chars to the right of these 100 chars)
       theRest <- substring(longChar, 101, nchar(longChar))
-      addUnder100(theRest, dataf, lc=1)
+      addUnder100(theRest, dataf, lc=1)#this recursion is gnarly lol
     } else{
-      dataf <- rbind(dataf,data.frame(word = longChar, RC = 0, LC = lc))
+      dataf <- rbind(dataf,data.frame(word = longChar, RC = 0, LC = lc))# if a word is 100 chars or shorter, it gets added to the dataframe with no right continuance and the appropriate left cont.
       dataf
     }
   }
   newdf <- setNames(data.frame(matrix(ncol = 3, nrow = 0)), c("word", "RC", "LC"))
   index<-1
   for (c in charvector){
-    newdf <- addUnder100(c, newdf) 
+    newdf <- addUnder100(c, newdf) #omg this is why my function is so slow fml. What kind of ridiculous n^2 recursion is this ffs
   }
   newdf
 }
 
-putIntoDB <- function(name="testSep4", rev=0, purp="test", content, mydb){ #successor of giveToDB
-  splitContent <-strsplit(content,split="[[:punct:][:space:]]")[[1]]
-  splitWithoutBlanks <- splitContent[splitContent!=""]
-  contentWithConts <- continuance(splitWithoutBlanks)
-  rownum <- nrow(contentWithConts)
-  if (rownum > 0){
-    print(fetch(dbSendQuery(mydb, paste0("call rev_doc_add(\"",name,"\",\"",rev,"\",\"",purp,"\")")),n=-1))
-    while(dbMoreResults(mydb)){
-     throwawayResult<-fetch(dbNextResult(mydb), n=-1) 
+putIntoDB <- function(name="testSep13", rev=0, purp="test", content="", mydb, lang="en", error = F){
+  print(fetch(dbSendQuery(mydb, sprintf("call rev_doc_add(\"%s\",\"%s\",\"%s\",\"%s\",\"%s\")",name, rev, purp, lang, error)),n=-1))#Add error to this procedure, as well as to the unique of the table
+  #nothing else happens if there is error
+  if (!error){
+    splitContent<-
+      if (lang=="ja" | lang == "zh"){#potentially other varieties of chinese. Need to handle non-western punctuation in the future. 
+        splitContent <- strsplit(content,split="")[[1]]#for kanji-using languages, each individual character will be entered, regardless if it is kanji or not.
+      }else{
+        splitContent <- strsplit(content,split="[[:punct:][:space:]]")[[1]]#for example, korean uses spaces
+      }
+    splitWithoutBlanks <- splitContent[splitContent!=""]#look to see if whitespace also exists, especially in zh and ja
+    contentWithConts <- continuance(splitWithoutBlanks) #fix this hot garbage
+    rownum <- nrow(contentWithConts)
+    print(fetch(dbSendQuery(mydb, sprintf("call rev_doc_add(\"%s\",\"%s\",\"%s\", \"%s\")",name, rev, purp, lang)),n=-1))#Add error to this procedure #adds wikipage to db
+    while(dbMoreResults(mydb)){#don't know how this would happen if i fetched -1 before
+      throwawayResult<-fetch(dbNextResult(mydb), n=-1) #in case there are just random uncollected results
     }
-    for (r in 1:nrow(contentWithConts)){#figure out why this is only doing one word at a time (three rows for >200 char word)
+    for (r in 1:nrow(contentWithConts)){
       word <- contentWithConts[r,1]
       right <- contentWithConts[r,2]
       left <- contentWithConts[r,3]
       while(dbMoreResults(mydb)) {
         anotherResult<-dbNextResult(mydb)#throwaway. might be a duplicate of throwawayResult above, or maybe they're both necessary
       }
-      eachquery<-dbSendQuery(mydb, paste0("call textstring_and_word_add(\"",word,"\")"))
-      id <- dbGetQuery(mydb, "select last_insert_id();")[1,1]
+      eachquery<-dbSendQuery(mydb, paste0("call textstring_and_word_add(\"",word,"\")")) #adds individual word to database, with doc being the last added doc
+      id <- dbGetQuery(mydb, "select last_insert_id();")[1,1]# the purpose of this is similar to dbNextResult
       updatequery<- dbSendQuery(mydb,paste0("update textstring set left_continuance=",left,",right_continuance=",right," where word_id=",id))
-      #print(id)
-      #print(r)
-      
+      #tbh it might be appropriate to do contentWithConts as a temp table in mysql bc that would do wonders for performance.
     }
-    print(paste("last word added into", name, "doc:"))
-    print(fetch(dbSendQuery(mydb, "select * from textstring order by word_id desc limit 1"), n=-1))
+    print(paste("last word added into", name, "doc:")) 
+    print(fetch(dbSendQuery(mydb, "select * from textstring order by word_id desc limit 1"), n=-1))#the insertions are all done. #prints the last word added
+    print(paste("number of words", as.character(rownum)))#number of words that were added.
   }
-  print(paste("number of words", as.character(rownum)))
 }
 
-NamesRevsPurpsDB <- function(url, purpose, db){#do something for when the xpath in wikiProcess doesnt work # this might be because of when the link is to an article section
-  df <- NamesRevsPurps(url, purpose)#add language processing
-  # View(df)
+NamesRevsPurpsDB <- function(url, purpose, db){
+  df <- NamesRevsPurps(url, purpose)#makes df out of list of links in url page
   for (row in 1:nrow(df[2])){
-    thisname <- df[row,1]
-    thisrev <- as.character(df[row, 2])
-    thispurp <- df[row, 3]#this column isnt necessary!!!
-    thiscontent <- wikiProcess(thisrev)
-    putIntoDB(name = thisname, rev = thisrev, purp=thispurp, content=thiscontent, mydb = db)#add language
-    # filename <- paste0(df[row,1],"-",df[row,2],"-",df[row,3],".txt")
-    # article <- wikiProcess(df[row,2])
-    # write(article,filename)
-    print(paste(thisname, thisrev, "logged into DB."))
+    thisname <- df$names[row] #name of doc
+    thisrev <- as.character(df$revisions[row]) #revision of doc
+    thispurp <- df$purpose[row]#this column is not different for each row
+    thislang <- df$langs[row]#the lang of doc
+    tryCatch({
+      thiscontent <- wikiProcess(thisrev, thislang, db) #gets text from wikipage. throws error if text cant be retrieved
+      putIntoDB(name = thisname, rev = thisrev, purp=thispurp, content=thiscontent, lang=thislang, mydb = db)#puts wikipage content into DB according to name, revision, purpose, and language
+      print(paste(thisname, thisrev, "logged into DB."))#the document has been completely logged into db, according to prev. function.
+    }, error = function(e) {
+      if (e$message == "xpath"){ #other errors won't be handled lol
+        putIntoDB(name = thisname, rev = thisrev, purp=thispurp, lang=thislang, mydb = db, error = T)#allows for logging of xpath error into db
+        warning(sprintf("xpath unable to retrieve content for %s %s ; error logged in database", thisname, thisrev))
+      } else{
+        stop(e$message)
+      }
+    })
   }
-  #for each row{
-  #wikiprocess
-  #write text
 }
 
 tfidfCSV <- function(url, purpose, username, pw){
   db <- dbConnect(MySQL(), user=username, password=pw, dbname='lexicon', host='localhost', port=3307)
-  NamesRevsPurpsDB(url, purpose, db)
+  NamesRevsPurpsDB(url, purpose, db) #gets wikipedia content and puts it into database
   
-  df<- fetch(dbSendQuery(db, paste0("select * from docs where purpose = \"",purpose,"\" order by doc_id desc limit 100")), n=-1)
+  df<- fetch(dbSendQuery(db, paste0("select * from docs where purpose = \"",purpose,"\" and exists_error = 0 order by doc_id desc limit 100")), n=-1) #gets all documents just inserted, in order to do tfidf
   for(i in 1:nrow(df)){
     doc_id <- df[i,1]
     name <- df[i,2]
     rev <- df[i,4]
     purp <-df[i,5]
-    tfidf <- fetch(dbSendQuery(db, paste0("call tfidf(",doc_id,")")), n=-1)#worth mentioning lots of times, that integers like doc_id max out at around 2 billion in MySQL. The highest ints so far are ~900 million
+    tfidf <- fetch(dbSendQuery(db, paste0("call tfidf(",doc_id,")")), n=-1)#ALSO INCLUDE EXISTS_ERROR
+    #worth mentioning lots of times, that integers like doc_id max out at around 2 billion in MySQL. The highest ints so far are ~900 million
     while(dbMoreResults(db)){
       res1<- dbNextResult(db)
       unneededresult <- fetch(res1, n=-1)#throwaway
     }
-    write.csv(tfidf, paste(name,rev,paste0(purp,".csv"), sep="-"))
+    write.csv(tfidf, paste(name,rev,paste0(purp,".csv"), sep="-"))#writes tfidf csv to working directory
   }
-  dbDisconnect(db)
+  dbDisconnect(db)#remember to disconnect db! there may only be 16 connections at once
 }
