@@ -1,0 +1,16 @@
+new_job
+location_land
+example.com
+6
+A small note.
+extra
+input
+to
+make
+sure
+that
+the
+test
+doesn't
+go
+farther

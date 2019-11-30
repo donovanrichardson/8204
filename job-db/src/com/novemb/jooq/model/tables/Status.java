@@ -3,6 +3,9 @@
  */
 package novemb.jooq.model.tables;
 
+import novemb.jooq.model.tables.Job;
+import novemb.jooq.model.tables.StatusType;
+
 
 import java.sql.Timestamp;
 import java.util.Arrays;
