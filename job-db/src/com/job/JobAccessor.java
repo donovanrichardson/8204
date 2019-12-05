@@ -81,12 +81,14 @@ public class JobAccessor {
         q.execute();
         Object insert_id = dsl.fetch("select last_insert_id()").getValue(0,0);
         UInteger actual_id = UInteger.valueOf(insert_id.toString());
-        this.output.println(insert_id);
+//        this.output.println(insert_id);
         Query q2 = dsl.insertInto(STATUS,STATUS.JOB_ID,STATUS.TYPE,STATUS.NOTES).values(actual_id,realStatus,notes);
-        this.output.println(q2);
+//        this.output.println(q2);
         q2.execute();
 
-        this.output.println(dsl.fetch(String.format("select id, job_name, location_name, url, stat.type, stat.name, stat.as_of from job left join(select job_id, as_of, type, type.name from status left join (select status_type_id, name from status_type) as type on status.type = type.status_type_id) as stat on job.id = stat.job_id where id = %s",actual_id)));
+//        this.output.println(dsl.fetch(String.format("select id, job_name, location_name, url, stat.type, stat.name, stat.as_of from job left join(select job_id, as_of, type, type.name from status left join (select status_type_id, name from status_type) as type on status.type = type.status_type_id) as stat on job.id = stat.job_id where id = %s",actual_id)));
+        this.output.println(dsl.select(JOB.ID,JOB.JOB_NAME,JOB.LOCATION_NAME,JOB.URL,STATUS.TYPE,STATUS_TYPE.NAME,STATUS.AS_OF).from(JOB.leftJoin(STATUS.leftJoin(STATUS_TYPE).on(STATUS.TYPE.eq(STATUS_TYPE.STATUS_TYPE_ID))).on(JOB.ID.eq(STATUS.JOB_ID))).where(JOB.ID.eq(actual_id)).fetch());
+
 
     }
 
@@ -99,7 +101,8 @@ public class JobAccessor {
             likeString = this.scan.nextLine();
 
             this.output.println("here are the jobs that match:");
-            this.output.println(dsl.fetch("select id, job_name, location_name, status.type, status.as_of, status.notes, status.name from job left join (select status_id, job_id, type, as_of, notes, stat.name from status left join (select status_type_id, name from status_type) as stat on stat.status_type_id = status.type where as_of in (select max(as_of) from status group by job_id)) as status on status.job_id = job.id where job_name like \"%" + likeString + "%\""));
+            this.output.println(dsl.select(JOB.ID,JOB.JOB_NAME,JOB.LOCATION_NAME,STATUS.TYPE,STATUS.AS_OF,STATUS.NOTES,STATUS_TYPE.NAME).from(JOB.leftJoin(STATUS.leftJoin(STATUS_TYPE).on(STATUS_TYPE.STATUS_TYPE_ID.eq(STATUS.TYPE))).on(STATUS.JOB_ID.eq(JOB.ID))).where(JOB.JOB_NAME.like("%"+likeString+"%")).fetch());
+//            this.output.println(dsl.fetch("select id, job_name, location_name, status.type, status.as_of, status.notes, status.name from job left join (select status_id, job_id, type, as_of, notes, stat.name from status left join (select status_type_id, name from status_type) as stat on stat.status_type_id = status.type where as_of in (select max(as_of) from status group by job_id)) as status on status.job_id = job.id where job_name like \"%" + likeString + "%\""));
             try{
                 Thread.sleep(500);
             } catch (InterruptedException e){
