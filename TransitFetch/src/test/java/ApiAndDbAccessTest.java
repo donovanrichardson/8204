@@ -29,7 +29,7 @@ public class ApiAndDbAccessTest extends AbstractTest{
     @Test
     public void accessExistsTest(){
         try{
-            initialize();
+            setup();
             assert(username.length() > 0);
             assert(password.length() > 0);
             assert(apiKey.length() > 0);
@@ -41,7 +41,7 @@ public class ApiAndDbAccessTest extends AbstractTest{
     @Test
     public void apiJSONTest(){
         try{
-            initialize();
+            setup();
         }catch(Exception e){
             fail();
         }
@@ -103,7 +103,7 @@ public class ApiAndDbAccessTest extends AbstractTest{
     @Test
     public void apiZipTest(){
         try{
-            initialize();
+            setup();
         }catch(Exception e){
             fail();
         }
