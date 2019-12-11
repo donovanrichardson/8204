@@ -3,6 +3,7 @@ package main.java;
 import main.java.wrapper.*;
 import org.jooq.DSLContext;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +26,10 @@ public class GtfsImporter {
         tableMap.put("stop_times.txt", new StopTimeWrapper());
     }
 
-    public void addTxt(String txt, InputStream inputStream) {
+    public void addTxt(String txt, InputStream inputStream) throws IOException {
+
         this.tableMap.get(txt).dbImport(this.dsl, inputStream);
+
     }
 
 }

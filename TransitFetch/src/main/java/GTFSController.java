@@ -16,5 +16,5 @@ public interface GTFSController {
 
     Result<FeedVersionRecord> getFeedVersions();
 
-    void importFeeds();
+    String getLatest(String feed);
 }

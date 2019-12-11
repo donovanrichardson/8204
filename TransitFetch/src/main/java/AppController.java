@@ -18,12 +18,12 @@ import java.io.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static com.schema.Tables.*;
+import static com.schema.Tables.FEED;
+import static com.schema.Tables.FEED_VERSION;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class AppController implements GTFSController {
@@ -69,7 +69,13 @@ public class AppController implements GTFSController {
     public void addFeedVersion(FeedRecord f) throws IOException {
         FeedVersion fv = FEED_VERSION;
         String feedId = f.get(FEED.ID);
-        JSONObject versionsJson = getFeedJSON(feedId);
+        JSONObject versionsJson = null;
+        try {
+            versionsJson = getFeedJSON(feedId);
+        } catch (IOException e) {
+            System.out.println("Could not GET the GTFS versions");
+            throw e;
+        }
         JSONObject latest = versionsJson.getJSONObject("results").getJSONArray("versions").getJSONObject(0);
         String versionId = latest.getString("id");
         ULong timestamp = ULong.valueOf(latest.getLong("ts"));
@@ -79,6 +85,24 @@ public class AppController implements GTFSController {
         String finish = latest.getJSONObject("d").getString("f");
 
         dsl.insertInto(fv, fv.ID, fv.FEED, fv.TIMESTAMP, fv.SIZE, fv.URL, fv.START, fv.FINISH).values(versionId, feedId, timestamp, size, downloadUrl, start, finish).execute();
+
+        try(ZipInputStream verZip = this.getGtfsZip(versionId)){ //IOException may be thrown on this line
+            GtfsImporter imp = new GtfsImporter(this.dsl);
+            Map<String, InputStream> zipMap = this.unzip(verZip);
+            try {
+                for (String txt : order) {
+                    imp.addTxt(txt, zipMap.get(txt)); //IOException may be thrown on this line
+                }
+            } catch (IOException e){
+                this.dsl.deleteFrom(FEED_VERSION).where(FEED_VERSION.ID.eq(versionId)).execute();
+                e.printStackTrace();
+                System.out.println(String.format("All records associated with %s have been removed to avoid incomplete data import", versionId));
+            }
+        }catch (IOException io1){
+            System.out.println("Could not retrieve the GTFS zip file.");
+            throw io1;
+        }
+
     }
 
     @Override
@@ -86,22 +110,32 @@ public class AppController implements GTFSController {
         return dsl.selectFrom(FEED_VERSION).fetch();
     }
 
+    /**
+     * gets the datebase's latest feed version id from a feed
+     * @param feed feed id
+     * @return
+     */
     @Override
-    public void importFeeds() {
-
-        List<String> importVersions = this.dsl.select(FEED_VERSION.ID, AGENCY.KEY).from(FEED_VERSION.leftJoin(AGENCY).on(AGENCY.FEED_VERSION.eq(FEED_VERSION.ID))).where(AGENCY.FEED_VERSION.isNull()).fetch().getValues(FEED_VERSION.ID);
-
-        for(String v : importVersions){
-            try(ZipInputStream verZip = this.getGtfsZip(v)){
-                GtfsImporter imp = new GtfsImporter(this.dsl);
-                Map<String, InputStream> zipMap = this.unzip(verZip);
-                for(String txt : order){
-                    imp.addTxt(txt, zipMap.get(txt));
-                }
-            }
-        }
-
+    public String getLatest(String feed) {
+        return this.dsl.select(FEED_VERSION.ID).from(FEED_VERSION).where(FEED_VERSION.FEED.eq(feed)).orderBy(FEED_VERSION.TIMESTAMP.desc()).fetchOne(FEED_VERSION.ID);
     }
+
+//    @Override
+//    public void importFeeds() {
+//
+//        List<String> importVersions = this.dsl.select(FEED_VERSION.ID, AGENCY.KEY).from(FEED_VERSION.leftJoin(AGENCY).on(AGENCY.FEED_VERSION.eq(FEED_VERSION.ID))).where(AGENCY.FEED_VERSION.isNull()).fetch().getValues(FEED_VERSION.ID);
+//
+//        for(String v : importVersions){
+//            try(ZipInputStream verZip = this.getGtfsZip(v)){
+//                GtfsImporter imp = new GtfsImporter(this.dsl);
+//                Map<String, InputStream> zipMap = this.unzip(verZip);
+//                for(String txt : order){
+//                    imp.addTxt(txt, zipMap.get(txt));
+//                }
+//            }
+//        }
+//
+//    }
 
     private Map<String, InputStream> unzip(ZipInputStream verZip) {
 
@@ -127,6 +161,7 @@ public class AppController implements GTFSController {
                 while ((l = verZip.read(b)) > 0) {
                     out.write(b, 0, l);
                 }
+                out.flush();
             }catch(EOFException e){
                 e.printStackTrace();
             }

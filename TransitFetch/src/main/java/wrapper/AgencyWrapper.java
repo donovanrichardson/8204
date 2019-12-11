@@ -1,13 +1,20 @@
 package main.java.wrapper;
 
-import org.jooq.DSLContext;
+import com.schema.tables.records.AgencyRecord;
 
-import java.io.InputStream;
+import static com.schema.tables.Agency.AGENCY;
 
-public class AgencyWrapper extends AbstractTableWrapper {
+public class AgencyWrapper extends AbstractTableWrapper<AgencyRecord> {
 
-    @Override
-    public void dbImport(DSLContext dsl, InputStream inputStream) {
 
+    public AgencyWrapper() {
+        this.table = AGENCY;
+        this.columns.put("agency_id", AGENCY.AGENCY_ID);
+        this.columns.put("agency_name", AGENCY.AGENCY_NAME);
+        this.columns.put("agency_timezone", AGENCY.AGENCY_TIMEZONE);
+        this.columns.put("agency_url", AGENCY.AGENCY_URL);
     }
+
+
+
 }
