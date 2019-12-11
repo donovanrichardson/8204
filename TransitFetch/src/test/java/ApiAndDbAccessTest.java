@@ -64,7 +64,7 @@ public class ApiAndDbAccessTest extends AbstractTest{
     }
 
     @Test
-    public void localZipTest() throws FileNotFoundException, IOException{
+    public void localZipTest() throws IOException{
         File ruby = new File("ruby.zip");
         FileInputStream rfis = new FileInputStream(ruby);
         ZipInputStream zis = new ZipInputStream(rfis);

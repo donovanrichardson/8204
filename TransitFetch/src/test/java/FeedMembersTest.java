@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import static com.schema.tables.Feed.FEED;
+
 public class FeedMembersTest extends AbstractTest{
 
     private String wstring = "bus-it-waikato/1226";
@@ -73,6 +75,8 @@ public class FeedMembersTest extends AbstractTest{
             fail();
         } catch(Exception e){
             throw e;
+        }finally{
+            this.dsl.delete(FEED).where(FEED.ID.eq("bus-it-waikato/1226")).execute(); // lol it isn't working THAtS BecAuse You didNt put eXecUTE aT tHE enD
         }
 
 

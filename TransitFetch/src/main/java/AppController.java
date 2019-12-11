@@ -14,12 +14,17 @@ import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
-import java.io.IOException;
+import java.io.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
-import static com.schema.Tables.FEED;
-import static com.schema.Tables.FEED_VERSION;
+import static com.schema.Tables.*;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class AppController implements GTFSController {
 
@@ -27,6 +32,7 @@ public class AppController implements GTFSController {
     String dbpass;
     String apiKey;
     DSLContext dsl;
+    private static final String[] order = {"agency.txt", "stops.txt", "routes.txt", "calendar.txt", "calendar_dates.txt", "shapes.txt", "trips.txt", "frequencies.txt", "stop_times.txt"};
 
     public AppController(String dbuser, String dbpass, String apiKey) throws SQLException {
         this.dbuser = dbuser;
@@ -47,7 +53,7 @@ public class AppController implements GTFSController {
 
     }
 
-    private JSONObject getFeedJSON(String feedId) throws IOException {
+    private JSONObject  getFeedJSON(String feedId) throws IOException {
         String requestUrl = String.format("https://api.transitfeeds.com/v1/getFeedVersions?key=%s&feed=%s&page=1&limit=10&err=1&warn=1",this.apiKey,feedId);
         Connection api = Jsoup.connect(requestUrl);
         String jString = api.ignoreContentType(true).get().body().text(); //Throws IOException
@@ -78,5 +84,67 @@ public class AppController implements GTFSController {
     @Override
     public Result<FeedVersionRecord> getFeedVersions() {
         return dsl.selectFrom(FEED_VERSION).fetch();
+    }
+
+    @Override
+    public void importFeeds() {
+
+        List<String> importVersions = this.dsl.select(FEED_VERSION.ID, AGENCY.KEY).from(FEED_VERSION.leftJoin(AGENCY).on(AGENCY.FEED_VERSION.eq(FEED_VERSION.ID))).where(AGENCY.FEED_VERSION.isNull()).fetch().getValues(FEED_VERSION.ID);
+
+        for(String v : importVersions){
+            try(ZipInputStream verZip = this.getGtfsZip(v)){
+                GtfsImporter imp = new GtfsImporter(this.dsl);
+                Map<String, InputStream> zipMap = this.unzip(verZip);
+                for(String txt : order){
+                    imp.addTxt(txt, zipMap.get(txt));
+                }
+            }
+        }
+
+    }
+
+    private Map<String, InputStream> unzip(ZipInputStream verZip) {
+
+        Map<String, InputStream> result = new HashMap<>();
+
+        while (true) {
+            ZipEntry entry;
+            byte[] b = new byte[1024];
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int l;
+
+            try {
+                entry = verZip.getNextEntry();
+            } catch (IOException e) {
+                break;
+            }
+
+            if (entry == null) {
+                break;
+            }
+
+            try {
+                while ((l = verZip.read(b)) > 0) {
+                    out.write(b, 0, l);
+                }
+            }catch(EOFException e){
+                e.printStackTrace();
+            }
+            catch (IOException i) {
+                System.out.println("there was an ioexception");
+                i.printStackTrace();
+                fail();
+            }
+            result.put(entry.getName(), new ByteArrayInputStream(out.toByteArray()));
+        }
+        return result;
+    }
+
+    private ZipInputStream getGtfsZip(String v) throws IOException {
+        String apiUrl = this.dsl.select(FEED_VERSION.URL).from(FEED_VERSION).where(FEED_VERSION.ID.eq(v)).fetchOne(FEED_VERSION.URL);
+        Connection zipConnect = Jsoup.connect(apiUrl);
+        Connection.Response almostZipStream = zipConnect.ignoreContentType(true).execute();
+        ZipInputStream zis = new ZipInputStream(almostZipStream.bodyStream());
+        return zis;
     }
 }

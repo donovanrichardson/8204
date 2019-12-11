@@ -15,4 +15,6 @@ public interface GTFSController {
     void addFeedVersion(FeedRecord f) throws IOException;
 
     Result<FeedVersionRecord> getFeedVersions();
+
+    void importFeeds();
 }

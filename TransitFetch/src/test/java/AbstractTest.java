@@ -27,7 +27,7 @@ public class AbstractTest {
         apiKey = s.nextLine();
         java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/lexicon?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
         Configuration conf = new DefaultConfiguration().set(conn).set(SQLDialect.MYSQL_8_0);
-        DSLContext dsl = DSL.using(conf);
+        this.dsl = DSL.using(conf);
     }
 
     boolean matchesLine(String multiLine, String regex){
