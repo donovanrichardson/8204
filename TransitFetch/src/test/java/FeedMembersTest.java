@@ -1,23 +1,14 @@
 package test.java;
 
 import com.schema.tables.records.FeedRecord;
-import com.schema.tables.records.FeedVersionRecord;
 import main.java.AppController;
 import main.java.FeedQuery;
 import main.java.GTFSController;
 import main.java.IdFeedQuery;
 import org.jooq.Result;
-import org.jooq.exception.DataAccessException;
-import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import static com.schema.tables.Feed.FEED;
 
 public class FeedMembersTest extends AbstractTest{
 
@@ -39,50 +30,50 @@ public class FeedMembersTest extends AbstractTest{
     public FeedMembersTest() throws SQLException {
     }
 
-    void addFeed() throws IOException { //maybe should not be a test
-        this.c.addFeeds(this.waikato);
-        this.r1 = c.getFeeds();
-    }
-
-    void addFeedVersion() throws IOException {
-        for (FeedRecord f : r1){
-            c.addFeedVersion(f);
-        }
-    }
-
-    @Test
-    public void fmTest(){
-        try{
-            this.setup();
-        } catch (IOException | SQLException e){
-            e.printStackTrace();
-            fail();
-        }
-        try {
-            this.addFeed();
-            try{
-                this.addFeed();
-            }catch(Exception e){
-                assertEquals(DataAccessException.class, e.getClass());
-            }
-            this.addFeedVersion();
-            Result<FeedVersionRecord> versions = c.getFeedVersions();
-            System.out.print(versions.toString());
-            assert(this.matchesLine(versions.toString(), matchString));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            fail();
-        } catch(Exception e){
-            throw e;
-        }finally{
-            this.dsl.delete(FEED).where(FEED.ID.eq("bus-it-waikato/1226")).execute(); // lol it isn't working THAtS BecAuse You didNt put eXecUTE aT tHE enD
-        }
-
-
-
-
-
-    }
+//    void addFeed() throws IOException { //maybe should not be a test
+//        this.c.addFeeds(this.waikato);
+//        this.r1 = c.getFeeds();
+//    }
+//
+//    void addFeedVersion() throws IOException {
+//        for (FeedRecord f : r1){
+//            c.addFeedVersion(f);
+//        }
+//   }
+//
+//    @Test
+//    public void fmTest(){
+//        try{
+//            this.setup();
+//        } catch (IOException | SQLException e){
+//            e.printStackTrace();
+//            fail();
+//        }
+//        try {
+//            this.addFeed();
+//            try{
+//                this.addFeed();
+//            }catch(Exception e){
+//                assertEquals(DataAccessException.class, e.getClass());
+//            }
+//            this.addFeedVersion();
+//            Result<FeedVersionRecord> versions = c.getFeedVersions();
+//            System.out.print(versions.toString());
+//            assert(this.matchesLine(versions.toString(), matchString));
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            fail();
+//        } catch(Exception e){
+//            throw e;
+//        }finally{
+//            this.dsl.delete(FEED).where(FEED.ID.eq("bus-it-waikato/1226")).execute(); // lol it isn't working THAtS BecAuse You didNt put eXecUTE aT tHE enD
+//        }
+//
+//
+//
+//
+//
+//    }
 
 }

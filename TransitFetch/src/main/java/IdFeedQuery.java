@@ -1,6 +1,5 @@
 package main.java;
 
-import org.jooq.DSLContext;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -25,7 +24,7 @@ public class IdFeedQuery implements FeedQuery {
     }
 
     @Override
-    public void addSpecifiedFeeds(DSLContext dsl, String apiKey) throws IOException {
+    public void addSpecifiedFeeds(AppController ac, String apiKey) throws IOException {
 
         String requestUrl = String.format("https://api.transitfeeds.com/v1/getFeedVersions?key=%s&feed=%s&page=1&limit=10&err=1&warn=1",apiKey,feedId);
         Connection api = Jsoup.connect(requestUrl);
@@ -33,12 +32,12 @@ public class IdFeedQuery implements FeedQuery {
         JSONObject feedJSON = new JSONObject(jString);
         JSONObject relevantJSON = feedJSON.getJSONObject("results").getJSONArray("versions").getJSONObject(0).getJSONObject("f");
 
-        String feedid = relevantJSON.getString("id");
+        String feedid2 = relevantJSON.getString("id");
         String feedType = relevantJSON.getString("ty");
         String feedTitle = relevantJSON.getString("t");
         int location = relevantJSON.getJSONObject("l").getInt("id");
 
-        dsl.insertInto(FEED, FEED.ID, FEED.TYPE, FEED.TITLE, FEED.LOCATION).values(feedid, feedType, feedTitle, location).execute();
-
+        ac.dsl.insertInto(FEED, FEED.ID, FEED.TYPE, FEED.TITLE, FEED.LOCATION).values(feedid2, feedType, feedTitle, location).execute();
+        ac.addFeedVersion(feedid2);
     }
 }

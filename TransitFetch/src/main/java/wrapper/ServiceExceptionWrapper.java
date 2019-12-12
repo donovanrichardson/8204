@@ -57,7 +57,7 @@ public class ServiceExceptionWrapper extends AbstractTableWrapper<ServiceExcepti
             }
         }
         forService.reset();
-        dsl.loadInto(SERVICE).onDuplicateKeyIgnore().loadCSV(forService).fields(fields).execute();
+        dsl.loadInto(SERVICE).onDuplicateKeyIgnore().loadCSV(forService).fields(fields).nullString("").execute();
 
         super.dbImport(dsl, forExceptions);
     }

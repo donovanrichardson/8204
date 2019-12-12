@@ -10,9 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static com.schema.tables.Feed.FEED;
 import static com.schema.tables.FeedVersion.FEED_VERSION;
 import static org.junit.jupiter.api.Assertions.fail;
-import static com.schema.tables.Feed.FEED;
 
 public class FeedImportTest extends AbstractTest {
 
@@ -37,20 +37,34 @@ public class FeedImportTest extends AbstractTest {
 
     @Test
     public void importFeedsTest(){
-        try{
-            this.c.addFeeds(mexico);
-            this.c.addFeeds(sfmuni);
-        } catch (IOException e){
+        boolean exc = false;
+        try {
+            try {
+                this.setup();
+                this.c.addFeeds(mexico);
+                this.c.addFeeds(sfmuni);
+            } catch (IOException | SQLException e) {
+                e.printStackTrace();
+                throw e;
+            }
+
+            String mexicoVer = c.getLatest("mexico-city-federal-district-government/70");
+            String sfVer = c.getLatest("sfmta/60");
+
+
+            System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = %s group by feed_version", mexicoVer)));
+            System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = %s group by feed_version", sfVer)));
+        } catch (Exception e){
             e.printStackTrace();
-            fail();
+            exc = true;
+        } finally{
+            this.dsl.deleteFrom(FEED).where(FEED.ID.eq("mexico-city-federal-district-government/70")).execute();
+            this.dsl.deleteFrom(FEED).where(FEED.ID.eq("sfmta/60")).execute();
+            if (exc == true) {
+                fail();
+            }
         }
 
-        String mexicoVer = c.getLatest("mexico-city-federal-district-government/70");
-        String sfVer = c.getLatest("sfmta/60");
-
-
-        System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = %s group by feed_version", mexicoVer)));
-        System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = %s group by feed_version", sfVer)));
 
     }
 

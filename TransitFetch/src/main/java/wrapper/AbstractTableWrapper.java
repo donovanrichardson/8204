@@ -12,19 +12,19 @@ import java.util.*;
 public abstract class AbstractTableWrapper<R extends Record> implements TableWrapper {
 
     Table<R> table;
-    Map<String,Field<?>> columns;
+    Map<String,Field<?>> columns = new HashMap<>();
 
     @Override
     public void dbImport(DSLContext dsl, InputStream inputStream) throws IOException {
         inputStream.mark(2000);
         Scanner s = new Scanner(inputStream);
-        String[] columns = s.nextLine().split("\"*\\s*,\\s*\"*"); //todo how to do this correctly
+        String[] columns = s.nextLine().split("\"*\\s*,\\s*\"*"); //todo how to do this correctly. namely, removing quotes
         List<Field<?>> fields = new ArrayList();
         for (String col : columns){
             fields.add(this.columns.get(col));
         }
         inputStream.reset();
-        dsl.loadInto(table).loadCSV(inputStream).fields(fields).execute();
+        dsl.loadInto(table).loadCSV(inputStream).fields(fields).nullString("").execute();
 
 
 

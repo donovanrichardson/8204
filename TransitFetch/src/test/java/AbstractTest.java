@@ -25,7 +25,7 @@ public class AbstractTest {
         username = s.nextLine();
         password = s.nextLine();
         apiKey = s.nextLine();
-        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/lexicon?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
+        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/gtfs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", username, password);
         Configuration conf = new DefaultConfiguration().set(conn).set(SQLDialect.MYSQL_8_0);
         this.dsl = DSL.using(conf);
     }

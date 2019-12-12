@@ -41,7 +41,7 @@ public class AppController implements GTFSController {
 //        System.out.println(this.dbuser);
 //        System.out.println(this.dbpass);
 //        System.out.println(this.apiKey);
-        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/lexicon?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", this.dbuser, this.dbpass);
+        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/gtfs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", this.dbuser, this.dbpass);
         Configuration conf = new DefaultConfiguration().set(conn).set(SQLDialect.MYSQL_8_0);
         this.dsl = DSL.using(conf);
     }
@@ -49,7 +49,7 @@ public class AppController implements GTFSController {
     @Override
     public void addFeeds(FeedQuery q) throws IOException {
 
-        q.addSpecifiedFeeds(this.dsl, this.apiKey);
+        q.addSpecifiedFeeds(this, this.apiKey);
 
     }
 
@@ -66,9 +66,8 @@ public class AppController implements GTFSController {
     }
 
     @Override
-    public void addFeedVersion(FeedRecord f) throws IOException {
+    public void addFeedVersion(String feedId) throws IOException {
         FeedVersion fv = FEED_VERSION;
-        String feedId = f.get(FEED.ID);
         JSONObject versionsJson = null;
         try {
             versionsJson = getFeedJSON(feedId);

@@ -12,7 +12,7 @@ public interface GTFSController {
 
     Result<FeedRecord> getFeeds();
 
-    void addFeedVersion(FeedRecord f) throws IOException;
+    void addFeedVersion(String feedId) throws IOException;
 
     Result<FeedVersionRecord> getFeedVersions();
 
