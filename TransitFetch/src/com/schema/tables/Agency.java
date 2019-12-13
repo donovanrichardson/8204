@@ -31,7 +31,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Agency extends TableImpl<AgencyRecord> {
 
-    private static final long serialVersionUID = 1956923082;
+    private static final long serialVersionUID = 1465319305;
 
     /**
      * The reference instance of <code>gtfs.agency</code>
@@ -74,7 +74,7 @@ public class Agency extends TableImpl<AgencyRecord> {
     /**
      * The column <code>gtfs.agency.feed_version</code>.
      */
-    public final TableField<AgencyRecord, String> FEED_VERSION = createField("feed_version", org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<AgencyRecord, String> FEED_VERSION = createField("feed_version", org.jooq.impl.SQLDataType.VARCHAR(255).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     /**
      * Create a <code>gtfs.agency</code> table reference

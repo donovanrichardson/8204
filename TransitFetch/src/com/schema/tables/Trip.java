@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Trip extends TableImpl<TripRecord> {
 
-    private static final long serialVersionUID = 39190516;
+    private static final long serialVersionUID = -1125671916;
 
     /**
      * The reference instance of <code>gtfs.trip</code>
@@ -98,12 +98,12 @@ public class Trip extends TableImpl<TripRecord> {
     /**
      * The column <code>gtfs.trip.wheelchair_accessible</code>.
      */
-    public final TableField<TripRecord, Byte> WHEELCHAIR_ACCESSIBLE = createField("wheelchair_accessible", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
+    public final TableField<TripRecord, Byte> WHEELCHAIR_ACCESSIBLE = createField("wheelchair_accessible", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * The column <code>gtfs.trip.bikes_allowed</code>.
      */
-    public final TableField<TripRecord, Byte> BIKES_ALLOWED = createField("bikes_allowed", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
+    public final TableField<TripRecord, Byte> BIKES_ALLOWED = createField("bikes_allowed", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * The column <code>gtfs.trip.feed_version</code>.

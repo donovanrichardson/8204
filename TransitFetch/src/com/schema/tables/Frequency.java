@@ -42,7 +42,7 @@ import org.jooq.types.UInteger;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Frequency extends TableImpl<FrequencyRecord> {
 
-    private static final long serialVersionUID = -208661614;
+    private static final long serialVersionUID = 1559719377;
 
     /**
      * The reference instance of <code>gtfs.frequency</code>
@@ -80,7 +80,7 @@ public class Frequency extends TableImpl<FrequencyRecord> {
     /**
      * The column <code>gtfs.frequency.exact_times</code>.
      */
-    public final TableField<FrequencyRecord, Byte> EXACT_TIMES = createField("exact_times", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
+    public final TableField<FrequencyRecord, Byte> EXACT_TIMES = createField("exact_times", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * The column <code>gtfs.frequency.feed_version</code>.

@@ -4,7 +4,7 @@ import com.schema.tables.records.ShapeRecord;
 
 import static com.schema.tables.Shape.SHAPE;
 
-public class ShapeWrapper extends AbstractTableWrapper<ShapeRecord> {
+public class ShapeWrapper extends OptionalTableWrapper<ShapeRecord> {
     public ShapeWrapper() {
         this.table = SHAPE;
 

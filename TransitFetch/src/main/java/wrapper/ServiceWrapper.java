@@ -4,7 +4,7 @@ import com.schema.tables.records.ServiceRecord;
 
 import static com.schema.tables.Service.SERVICE;
 
-public class ServiceWrapper extends AbstractTableWrapper<ServiceRecord> {
+public class ServiceWrapper extends OptionalTableWrapper<ServiceRecord> {
     public ServiceWrapper() {
         this.table = SERVICE;
 

@@ -9,7 +9,7 @@ import com.schema.tables.Shape;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
-import org.jooq.Record2;
+import org.jooq.Record3;
 import org.jooq.Record6;
 import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
@@ -29,7 +29,7 @@ import org.jooq.types.UInteger;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ShapeRecord extends UpdatableRecordImpl<ShapeRecord> implements Record6<String, Double, Double, UInteger, Double, String> {
 
-    private static final long serialVersionUID = -80349913;
+    private static final long serialVersionUID = -610455229;
 
     /**
      * Setter for <code>gtfs.shape.shape_id</code>.
@@ -123,8 +123,8 @@ public class ShapeRecord extends UpdatableRecordImpl<ShapeRecord> implements Rec
      * {@inheritDoc}
      */
     @Override
-    public Record2<String, String> key() {
-        return (Record2) super.key();
+    public Record3<String, String, UInteger> key() {
+        return (Record3) super.key();
     }
 
     // -------------------------------------------------------------------------

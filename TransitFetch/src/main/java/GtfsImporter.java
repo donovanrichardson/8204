@@ -1,6 +1,7 @@
 package main.java;
 
 import main.java.wrapper.*;
+import main.java.wrapper.exception.OptionalTableException;
 import org.jooq.DSLContext;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class GtfsImporter {
         tableMap.put("stop_times.txt", new StopTimeWrapper());
     }
 
-    public void addTxt(String txt, InputStream inputStream) throws IOException {
+    public void addTxt(String txt, InputStream inputStream) throws IOException, OptionalTableException {
 
         this.tableMap.get(txt).dbImport(this.dsl, inputStream);
 

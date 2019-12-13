@@ -8,25 +8,14 @@ import com.schema.Gtfs;
 import com.schema.Indexes;
 import com.schema.Keys;
 import com.schema.tables.records.ServiceExceptionRecord;
-
-import java.sql.Date;
-import java.util.Arrays;
-import java.util.List;
-
-import javax.annotation.Generated;
-
-import org.jooq.Field;
-import org.jooq.ForeignKey;
-import org.jooq.Index;
-import org.jooq.Name;
-import org.jooq.Record;
-import org.jooq.Schema;
-import org.jooq.Table;
-import org.jooq.TableField;
-import org.jooq.UniqueKey;
+import org.jooq.*;
 import org.jooq.impl.DSL;
 import org.jooq.impl.TableImpl;
 import org.jooq.types.UByte;
+
+import javax.annotation.Generated;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -42,7 +31,7 @@ import org.jooq.types.UByte;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ServiceException extends TableImpl<ServiceExceptionRecord> {
 
-    private static final long serialVersionUID = -437593782;
+    private static final long serialVersionUID = 43814896;
 
     /**
      * The reference instance of <code>gtfs.service_exception</code>
@@ -65,7 +54,7 @@ public class ServiceException extends TableImpl<ServiceExceptionRecord> {
     /**
      * The column <code>gtfs.service_exception.date</code>.
      */
-    public final TableField<ServiceExceptionRecord, Date> DATE = createField("date", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
+    public final TableField<ServiceExceptionRecord, String> DATE = createField("date", org.jooq.impl.SQLDataType.CHAR(8).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.CHAR)), this, "");
 
     /**
      * The column <code>gtfs.service_exception.exception_type</code>.

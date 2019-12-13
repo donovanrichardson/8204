@@ -3,6 +3,7 @@ package main.java;
 import com.schema.tables.FeedVersion;
 import com.schema.tables.records.FeedRecord;
 import com.schema.tables.records.FeedVersionRecord;
+import main.java.wrapper.exception.OptionalTableException;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -87,10 +88,21 @@ public class AppController implements GTFSController {
 
         try(ZipInputStream verZip = this.getGtfsZip(versionId)){ //IOException may be thrown on this line
             GtfsImporter imp = new GtfsImporter(this.dsl);
-            Map<String, InputStream> zipMap = this.unzip(verZip);
+            Map<String, InputStream> zipMap;
+            try{
+                zipMap = this.unzip(verZip);
+            } catch (Exception e){
+                throw e;
+            } finally{
+                verZip.close();
+            }
             try {
                 for (String txt : order) {
-                    imp.addTxt(txt, zipMap.get(txt)); //IOException may be thrown on this line
+                    try{
+                        imp.addTxt(txt, zipMap.get(txt)); //IOException may be thrown on this line
+                    } catch (OptionalTableException o){
+                        continue;
+                    }
                 }
             } catch (IOException e){
                 this.dsl.deleteFrom(FEED_VERSION).where(FEED_VERSION.ID.eq(versionId)).execute();
@@ -136,7 +148,7 @@ public class AppController implements GTFSController {
 //
 //    }
 
-    private Map<String, InputStream> unzip(ZipInputStream verZip) {
+    private Map<String, InputStream> unzip(ZipInputStream verZip) { //todo memory constraints are preventing this
 
         Map<String, InputStream> result = new HashMap<>();
 

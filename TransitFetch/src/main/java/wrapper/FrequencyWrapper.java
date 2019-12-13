@@ -4,7 +4,7 @@ import com.schema.tables.records.FrequencyRecord;
 
 import static com.schema.tables.Frequency.FREQUENCY;
 
-public class FrequencyWrapper extends AbstractTableWrapper<FrequencyRecord> {
+public class FrequencyWrapper extends OptionalTableWrapper<FrequencyRecord> {
 
     public FrequencyWrapper() {
         this.table = FREQUENCY;

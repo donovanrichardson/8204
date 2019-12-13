@@ -1,6 +1,7 @@
 package main.java.wrapper;
 
 import com.schema.tables.records.ServiceExceptionRecord;
+import main.java.wrapper.exception.OptionalTableException;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 
@@ -12,7 +13,7 @@ import java.util.Scanner;
 import static com.schema.tables.Service.SERVICE;
 import static com.schema.tables.ServiceException.SERVICE_EXCEPTION;
 
-public class ServiceExceptionWrapper extends AbstractTableWrapper<ServiceExceptionRecord> {
+public class ServiceExceptionWrapper extends OptionalTableWrapper<ServiceExceptionRecord> {
 
     public ServiceExceptionWrapper() {
         this.table = SERVICE_EXCEPTION;
@@ -25,8 +26,8 @@ public class ServiceExceptionWrapper extends AbstractTableWrapper<ServiceExcepti
     }
 
     @Override
-    public void dbImport(DSLContext dsl, InputStream inputStream) throws IOException{
-
+    public void dbImport(DSLContext dsl, InputStream inputStream) throws IOException, OptionalTableException {
+        this.verifyNotNull(inputStream);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         byte[] b = new byte[1024];

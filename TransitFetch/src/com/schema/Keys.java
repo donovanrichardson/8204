@@ -109,7 +109,7 @@ public class Keys {
         public static final UniqueKey<RouteRecord> KEY_ROUTE_PRIMARY = Internal.createUniqueKey(Route.ROUTE, "KEY_route_PRIMARY", Route.ROUTE.ROUTE_ID, Route.ROUTE.FEED_VERSION);
         public static final UniqueKey<ServiceRecord> KEY_SERVICE_PRIMARY = Internal.createUniqueKey(Service.SERVICE, "KEY_service_PRIMARY", Service.SERVICE.SERVICE_ID, Service.SERVICE.FEED_VERSION);
         public static final UniqueKey<ServiceExceptionRecord> KEY_SERVICE_EXCEPTION_PRIMARY = Internal.createUniqueKey(ServiceException.SERVICE_EXCEPTION, "KEY_service_exception_PRIMARY", ServiceException.SERVICE_EXCEPTION.SERVICE_ID, ServiceException.SERVICE_EXCEPTION.DATE, ServiceException.SERVICE_EXCEPTION.FEED_VERSION);
-        public static final UniqueKey<ShapeRecord> KEY_SHAPE_PRIMARY = Internal.createUniqueKey(Shape.SHAPE, "KEY_shape_PRIMARY", Shape.SHAPE.SHAPE_ID, Shape.SHAPE.FEED_VERSION);
+        public static final UniqueKey<ShapeRecord> KEY_SHAPE_PRIMARY = Internal.createUniqueKey(Shape.SHAPE, "KEY_shape_PRIMARY", Shape.SHAPE.SHAPE_ID, Shape.SHAPE.FEED_VERSION, Shape.SHAPE.SHAPE_PT_SEQUENCE);
         public static final UniqueKey<StopRecord> KEY_STOP_PRIMARY = Internal.createUniqueKey(Stop.STOP, "KEY_stop_PRIMARY", Stop.STOP.STOP_ID);
         public static final UniqueKey<StopTimeRecord> KEY_STOP_TIME_PRIMARY = Internal.createUniqueKey(StopTime.STOP_TIME, "KEY_stop_time_PRIMARY", StopTime.STOP_TIME.TRIP_ID, StopTime.STOP_TIME.STOP_SEQUENCE, StopTime.STOP_TIME.FEED_VERSION);
         public static final UniqueKey<TripRecord> KEY_TRIP_PRIMARY = Internal.createUniqueKey(Trip.TRIP, "KEY_trip_PRIMARY", Trip.TRIP.TRIP_ID, Trip.TRIP.FEED_VERSION);

@@ -41,7 +41,7 @@ import org.jooq.types.UInteger;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Route extends TableImpl<RouteRecord> {
 
-    private static final long serialVersionUID = 1287169480;
+    private static final long serialVersionUID = -13541018;
 
     /**
      * The reference instance of <code>gtfs.route</code>
@@ -69,12 +69,12 @@ public class Route extends TableImpl<RouteRecord> {
     /**
      * The column <code>gtfs.route.default_name</code>. route_short_name
      */
-    public final TableField<RouteRecord, String> DEFAULT_NAME = createField("default_name", org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "route_short_name");
+    public final TableField<RouteRecord, String> DEFAULT_NAME = createField("default_name", org.jooq.impl.SQLDataType.VARCHAR(255).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "route_short_name");
 
     /**
      * The column <code>gtfs.route.route_long_name</code>.
      */
-    public final TableField<RouteRecord, String> ROUTE_LONG_NAME = createField("route_long_name", org.jooq.impl.SQLDataType.VARCHAR(255).nullable(false).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
+    public final TableField<RouteRecord, String> ROUTE_LONG_NAME = createField("route_long_name", org.jooq.impl.SQLDataType.VARCHAR(255).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "");
 
     /**
      * The column <code>gtfs.route.route_desc</code>.
@@ -94,12 +94,12 @@ public class Route extends TableImpl<RouteRecord> {
     /**
      * The column <code>gtfs.route.route_color</code>.
      */
-    public final TableField<RouteRecord, String> ROUTE_COLOR = createField("route_color", org.jooq.impl.SQLDataType.CHAR(6).nullable(false).defaultValue(org.jooq.impl.DSL.inline("FFFFFF", org.jooq.impl.SQLDataType.CHAR)), this, "");
+    public final TableField<RouteRecord, String> ROUTE_COLOR = createField("route_color", org.jooq.impl.SQLDataType.CHAR(6).defaultValue(org.jooq.impl.DSL.inline("FFFFFF", org.jooq.impl.SQLDataType.CHAR)), this, "");
 
     /**
      * The column <code>gtfs.route.route_text_color</code>.
      */
-    public final TableField<RouteRecord, String> ROUTE_TEXT_COLOR = createField("route_text_color", org.jooq.impl.SQLDataType.CHAR(6).nullable(false).defaultValue(org.jooq.impl.DSL.inline("000000", org.jooq.impl.SQLDataType.CHAR)), this, "");
+    public final TableField<RouteRecord, String> ROUTE_TEXT_COLOR = createField("route_text_color", org.jooq.impl.SQLDataType.CHAR(6).defaultValue(org.jooq.impl.DSL.inline("000000", org.jooq.impl.SQLDataType.CHAR)), this, "");
 
     /**
      * The column <code>gtfs.route.route_sort_order</code>.

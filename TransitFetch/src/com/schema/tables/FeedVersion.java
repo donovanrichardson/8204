@@ -9,6 +9,7 @@ import com.schema.Indexes;
 import com.schema.Keys;
 import com.schema.tables.records.FeedVersionRecord;
 
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +42,7 @@ import org.jooq.types.ULong;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class FeedVersion extends TableImpl<FeedVersionRecord> {
 
-    private static final long serialVersionUID = -449196069;
+    private static final long serialVersionUID = 619745842;
 
     /**
      * The reference instance of <code>gtfs.feed_version</code>
@@ -90,6 +91,11 @@ public class FeedVersion extends TableImpl<FeedVersionRecord> {
      * The column <code>gtfs.feed_version.finish</code>.
      */
     public final TableField<FeedVersionRecord, String> FINISH = createField("finish", org.jooq.impl.SQLDataType.CHAR(8), this, "");
+
+    /**
+     * The column <code>gtfs.feed_version.inserted</code>.
+     */
+    public final TableField<FeedVersionRecord, Timestamp> INSERTED = createField("inserted", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.field("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "");
 
     /**
      * Create a <code>gtfs.feed_version</code> table reference

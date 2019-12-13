@@ -43,7 +43,7 @@ import org.jooq.types.UInteger;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StopTime extends TableImpl<StopTimeRecord> {
 
-    private static final long serialVersionUID = 1516003648;
+    private static final long serialVersionUID = -768176575;
 
     /**
      * The reference instance of <code>gtfs.stop_time</code>
@@ -91,12 +91,12 @@ public class StopTime extends TableImpl<StopTimeRecord> {
     /**
      * The column <code>gtfs.stop_time.pickup_type</code>.
      */
-    public final TableField<StopTimeRecord, UByte> PICKUP_TYPE = createField("pickup_type", org.jooq.impl.SQLDataType.TINYINTUNSIGNED.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINTUNSIGNED)), this, "");
+    public final TableField<StopTimeRecord, UByte> PICKUP_TYPE = createField("pickup_type", org.jooq.impl.SQLDataType.TINYINTUNSIGNED.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINTUNSIGNED)), this, "");
 
     /**
      * The column <code>gtfs.stop_time.drop_off_type</code>.
      */
-    public final TableField<StopTimeRecord, UByte> DROP_OFF_TYPE = createField("drop_off_type", org.jooq.impl.SQLDataType.TINYINTUNSIGNED.nullable(false).defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINTUNSIGNED)), this, "");
+    public final TableField<StopTimeRecord, UByte> DROP_OFF_TYPE = createField("drop_off_type", org.jooq.impl.SQLDataType.TINYINTUNSIGNED.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINTUNSIGNED)), this, "");
 
     /**
      * The column <code>gtfs.stop_time.shape_dist_traveled</code>.
@@ -106,7 +106,7 @@ public class StopTime extends TableImpl<StopTimeRecord> {
     /**
      * The column <code>gtfs.stop_time.timepoint</code>.
      */
-    public final TableField<StopTimeRecord, Byte> TIMEPOINT = createField("timepoint", org.jooq.impl.SQLDataType.TINYINT.nullable(false).defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
+    public final TableField<StopTimeRecord, Byte> TIMEPOINT = createField("timepoint", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("1", org.jooq.impl.SQLDataType.TINYINT)), this, "");
 
     /**
      * The column <code>gtfs.stop_time.feed_version</code>.

@@ -9,7 +9,6 @@ import com.schema.Indexes;
 import com.schema.Keys;
 import com.schema.tables.records.ServiceRecord;
 
-import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Service extends TableImpl<ServiceRecord> {
 
-    private static final long serialVersionUID = -1988857375;
+    private static final long serialVersionUID = 1862754493;
 
     /**
      * The reference instance of <code>gtfs.service</code>
@@ -99,12 +98,12 @@ public class Service extends TableImpl<ServiceRecord> {
     /**
      * The column <code>gtfs.service.start_date</code>.
      */
-    public final TableField<ServiceRecord, Date> START_DATE = createField("start_date", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
+    public final TableField<ServiceRecord, String> START_DATE = createField("start_date", org.jooq.impl.SQLDataType.CHAR(8), this, "");
 
     /**
      * The column <code>gtfs.service.end_date</code>.
      */
-    public final TableField<ServiceRecord, Date> END_DATE = createField("end_date", org.jooq.impl.SQLDataType.DATE.nullable(false), this, "");
+    public final TableField<ServiceRecord, String> END_DATE = createField("end_date", org.jooq.impl.SQLDataType.CHAR(8), this, "");
 
     /**
      * The column <code>gtfs.service.feed_version</code>.

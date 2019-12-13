@@ -1,5 +1,6 @@
 package main.java.wrapper;
 
+import main.java.wrapper.exception.OptionalTableException;
 import org.jooq.DSLContext;
 import org.jooq.Field;
 import org.jooq.Record;
@@ -15,19 +16,36 @@ public abstract class AbstractTableWrapper<R extends Record> implements TableWra
     Map<String,Field<?>> columns = new HashMap<>();
 
     @Override
-    public void dbImport(DSLContext dsl, InputStream inputStream) throws IOException {
+    public void dbImport(DSLContext dsl, InputStream inputStream) throws IOException, OptionalTableException {
+        this.verifyNotNull(inputStream);
         inputStream.mark(2000);
-        Scanner s = new Scanner(inputStream);
-        String[] columns = s.nextLine().split("\"*\\s*,\\s*\"*"); //todo how to do this correctly. namely, removing quotes
+        Scanner sc = new Scanner(inputStream);
+        String[] columns = sc.nextLine().split("[\\s\"]*,[\\s\"]*"); //todo how to do this correctly. namely, removing quotes
+        List<String> formattedCols = new ArrayList<>();
+        for (String st : columns){
+            formattedCols.add(st.replaceAll("[\\s\\ufeff\"]",""));
+        }
         List<Field<?>> fields = new ArrayList();
-        for (String col : columns){
+        for (String col : formattedCols){
             fields.add(this.columns.get(col));
         }
         inputStream.reset();
-        dsl.loadInto(table).loadCSV(inputStream).fields(fields).nullString("").execute();
+        try{
+            dsl.loadInto(table).loadCSV(inputStream).fields(fields).nullString("").execute();
+        } catch (Exception e){
+            throw e;
+        }finally{
+            inputStream.close();
+        }
 
 
 
+    }
+
+    void verifyNotNull(InputStream inputStream) throws OptionalTableException {
+        if(inputStream == null){
+            throw new NullPointerException("There is no zipfile associated with "+this.table.getName());
+        }
     }
 
 }

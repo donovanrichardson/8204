@@ -96,7 +96,7 @@ public class Indexes {
         public static Index SERVICE_SERVICE_ID = Internal.createIndex("service_id", Service.SERVICE, new OrderField[] { Service.SERVICE.SERVICE_ID }, false);
         public static Index SERVICE_EXCEPTION_PRIMARY = Internal.createIndex("PRIMARY", ServiceException.SERVICE_EXCEPTION, new OrderField[] { ServiceException.SERVICE_EXCEPTION.SERVICE_ID, ServiceException.SERVICE_EXCEPTION.DATE, ServiceException.SERVICE_EXCEPTION.FEED_VERSION }, true);
         public static Index SERVICE_EXCEPTION_SERVICE_EXCEPTION_FEED_VERSION_FK = Internal.createIndex("service_exception_feed_version_fk", ServiceException.SERVICE_EXCEPTION, new OrderField[] { ServiceException.SERVICE_EXCEPTION.FEED_VERSION }, false);
-        public static Index SHAPE_PRIMARY = Internal.createIndex("PRIMARY", Shape.SHAPE, new OrderField[] { Shape.SHAPE.SHAPE_ID, Shape.SHAPE.FEED_VERSION }, true);
+        public static Index SHAPE_PRIMARY = Internal.createIndex("PRIMARY", Shape.SHAPE, new OrderField[] { Shape.SHAPE.SHAPE_ID, Shape.SHAPE.FEED_VERSION, Shape.SHAPE.SHAPE_PT_SEQUENCE }, true);
         public static Index SHAPE_SHAPE_FEED_VERSION_FK = Internal.createIndex("shape_feed_version_fk", Shape.SHAPE, new OrderField[] { Shape.SHAPE.FEED_VERSION }, false);
         public static Index SHAPE_SHAPE_ID = Internal.createIndex("shape_id", Shape.SHAPE, new OrderField[] { Shape.SHAPE.SHAPE_ID }, false);
         public static Index STOP_PARENT_STATION = Internal.createIndex("parent_station", Stop.STOP, new OrderField[] { Stop.STOP.PARENT_STATION }, false);
