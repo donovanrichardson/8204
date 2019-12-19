@@ -8,7 +8,9 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-import static novemb.jooq.model.Tables.*;
+import static com.novemb.jooq.model.tables.StatusType.STATUS_TYPE;
+import static com.novemb.jooq.model.tables.Job.JOB;
+import static com.novemb.jooq.model.tables.Status.STATUS;
 
 
 public class JobAccessor {
@@ -45,6 +47,9 @@ public class JobAccessor {
         this.output.println("enter the job name");
         String name = scan.nextLine();
 
+        this.output.println("enter the company");
+        String company = scan.nextLine();
+
         this.output.println("enter the location name");
         String locName = scan.nextLine();
 
@@ -76,7 +81,7 @@ public class JobAccessor {
         this.output.println("any notes");
         String notes = scan.nextLine(); //TODO StringUtils.isEmpty()
 
-        Query q = dsl.insertInto(JOB, JOB.JOB_NAME, JOB.LOCATION_NAME, JOB.URL).values(name, locName, url);
+        Query q = dsl.insertInto(JOB, JOB.JOB_NAME, JOB.COMPANY, JOB.LOCATION_NAME, JOB.URL).values(name, company, locName, url);
 //        this.output.println(q);
         q.execute();
         Object insert_id = dsl.fetch("select last_insert_id()").getValue(0,0);
@@ -87,7 +92,7 @@ public class JobAccessor {
         q2.execute();
 
 //        this.output.println(dsl.fetch(String.format("select id, job_name, location_name, url, stat.type, stat.name, stat.as_of from job left join(select job_id, as_of, type, type.name from status left join (select status_type_id, name from status_type) as type on status.type = type.status_type_id) as stat on job.id = stat.job_id where id = %s",actual_id)));
-        this.output.println(dsl.select(JOB.ID,JOB.JOB_NAME,JOB.LOCATION_NAME,JOB.URL,STATUS.TYPE,STATUS_TYPE.NAME,STATUS.AS_OF).from(JOB.leftJoin(STATUS.leftJoin(STATUS_TYPE).on(STATUS.TYPE.eq(STATUS_TYPE.STATUS_TYPE_ID))).on(JOB.ID.eq(STATUS.JOB_ID))).where(JOB.ID.eq(actual_id)).fetch());
+        this.output.println(dsl.select(JOB.ID,JOB.JOB_NAME, JOB.COMPANY, JOB.LOCATION_NAME,JOB.URL,STATUS.TYPE,STATUS_TYPE.NAME,STATUS.AS_OF).from(JOB.leftJoin(STATUS.leftJoin(STATUS_TYPE).on(STATUS.TYPE.eq(STATUS_TYPE.STATUS_TYPE_ID))).on(JOB.ID.eq(STATUS.JOB_ID))).where(JOB.ID.eq(actual_id)).fetch());
 
 
     }
@@ -101,7 +106,7 @@ public class JobAccessor {
             likeString = this.scan.nextLine();
 
             this.output.println("here are the jobs that match:");
-            this.output.println(dsl.select(JOB.ID,JOB.JOB_NAME,JOB.LOCATION_NAME,STATUS.TYPE,STATUS.AS_OF,STATUS.NOTES,STATUS_TYPE.NAME).from(JOB.leftJoin(STATUS.leftJoin(STATUS_TYPE).on(STATUS_TYPE.STATUS_TYPE_ID.eq(STATUS.TYPE))).on(STATUS.JOB_ID.eq(JOB.ID))).where(JOB.JOB_NAME.like("%"+likeString+"%")).fetch());
+            this.output.println(dsl.select(JOB.ID,JOB.JOB_NAME,JOB.COMPANY, JOB.LOCATION_NAME,STATUS.TYPE,STATUS.AS_OF,STATUS.NOTES,STATUS_TYPE.NAME).from(JOB.leftJoin(STATUS.leftJoin(STATUS_TYPE).on(STATUS_TYPE.STATUS_TYPE_ID.eq(STATUS.TYPE))).on(STATUS.JOB_ID.eq(JOB.ID))).where(JOB.JOB_NAME.like("%"+likeString+"%")).fetch());
 //            this.output.println(dsl.fetch("select id, job_name, location_name, status.type, status.as_of, status.notes, status.name from job left join (select status_id, job_id, type, as_of, notes, stat.name from status left join (select status_type_id, name from status_type) as stat on stat.status_type_id = status.type where as_of in (select max(as_of) from status group by job_id)) as status on status.job_id = job.id where job_name like \"%" + likeString + "%\""));
             try{
                 Thread.sleep(500);
@@ -129,7 +134,7 @@ public class JobAccessor {
 //        this.output.println(q);
         q.execute();
 
-        this.output.println(dsl.fetch("select id, job_name, location_name, url, stat.type, stat.name, stat.as_of from job left join(select job_id, as_of, type, type.name from status left join (select status_type_id, name from status_type) as type on status.type = type.status_type_id) as stat on job.id = stat.job_id where id = "+job.toString()+" order by as_of desc limit 1"));
+        this.output.println(dsl.fetch("select id, job_name, company, location_name, url, stat.type, stat.name, stat.as_of from job left join(select job_id, as_of, type, type.name from status left join (select status_type_id, name from status_type) as type on status.type = type.status_type_id) as stat on job.id = stat.job_id where id = "+job.toString()+" order by as_of desc limit 1")); //TODO use jooq for this
 
     }
 

@@ -1,6 +1,6 @@
 import com.job.DSLSetup;
 import com.job.JobAccessor;
-import novemb.jooq.model.Tables;
+import com.novemb.jooq.model.Tables;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -19,13 +19,13 @@ import java.util.Collection;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import novemb.jooq.model.tables.Job;
+import com.novemb.jooq.model.tables.Job;
 
 import static junit.framework.TestCase.*;
-import static novemb.jooq.model.Tables.STATUS;
-import static novemb.jooq.model.Tables.JOB;
-import static novemb.jooq.model.Tables.STATUS_TYPE;
-import static novemb.jooq.model.Tables.LOCATION;
+import static com.novemb.jooq.model.Tables.STATUS;
+import static com.novemb.jooq.model.Tables.JOB;
+import static com.novemb.jooq.model.Tables.STATUS_TYPE;
+import static com.novemb.jooq.model.Tables.LOCATION;
 
 public class ConnectionTest {
 
