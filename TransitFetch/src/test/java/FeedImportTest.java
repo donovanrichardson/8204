@@ -52,8 +52,8 @@ public class FeedImportTest extends AbstractTest {
             String sfVer = c.getLatest("sfmta/60");
 
 
-            System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = %s group by feed_version", mexicoVer)));
-            System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = %s group by feed_version", sfVer)));
+            System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = \"%s\" group by feed_version", mexicoVer)));
+            System.out.println(this.dsl.fetch(String.format("select count(*) from stop_time where feed_version = \"%s\" group by feed_version", sfVer)));
         } catch (Exception e){
             e.printStackTrace();
             exc = true;

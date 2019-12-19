@@ -31,7 +31,7 @@ public abstract class AbstractTableWrapper<R extends Record> implements TableWra
         }
         inputStream.reset();
         try{
-            dsl.loadInto(table).loadCSV(inputStream).fields(fields).nullString("").execute();
+            dsl.loadInto(table).commitAfter(10000).loadCSV(inputStream).fields(fields).nullString("").execute();
         } catch (Exception e){
             throw e;
         }finally{

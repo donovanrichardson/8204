@@ -38,6 +38,6 @@ public class IdFeedQuery implements FeedQuery {
         int location = relevantJSON.getJSONObject("l").getInt("id");
 
         ac.dsl.insertInto(FEED, FEED.ID, FEED.TYPE, FEED.TITLE, FEED.LOCATION).values(feedid2, feedType, feedTitle, location).execute();
-        ac.addFeedVersion(feedid2);
+        ac.addFeedVersion(feedid2); //todo change the comment based on whether ioexception is thrown
     }
 }

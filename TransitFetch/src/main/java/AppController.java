@@ -1,5 +1,6 @@
 package main.java;
 
+import com.mysql.cj.jdbc.ConnectionImpl;
 import com.schema.tables.FeedVersion;
 import com.schema.tables.records.FeedRecord;
 import com.schema.tables.records.FeedVersionRecord;
@@ -14,6 +15,7 @@ import org.jooq.types.ULong;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+
 
 import java.io.*;
 import java.sql.DriverManager;
@@ -42,9 +44,12 @@ public class AppController implements GTFSController {
 //        System.out.println(this.dbuser);
 //        System.out.println(this.dbpass);
 //        System.out.println(this.apiKey);
-        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/gtfs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", this.dbuser, this.dbpass);
+        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/gtfs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoCommit=false&relaxAutoCommit=true", this.dbuser, this.dbpass);
         Configuration conf = new DefaultConfiguration().set(conn).set(SQLDialect.MYSQL_8_0);
-        this.dsl = DSL.using(conf);
+        ConnectionImpl cImpl = (ConnectionImpl)conf.connectionProvider().acquire();
+        cImpl.getSession().getServerSession().setAutoCommit(false);
+        Configuration conf2 = new DefaultConfiguration().set(cImpl).set(SQLDialect.MYSQL_8_0);
+        this.dsl = DSL.using(conf2);
     }
 
     @Override
@@ -91,7 +96,7 @@ public class AppController implements GTFSController {
             Map<String, InputStream> zipMap;
             try{
                 zipMap = this.unzip(verZip);
-            } catch (Exception e){
+            } catch (IOException e){
                 throw e;
             } finally{
                 verZip.close();
@@ -148,7 +153,7 @@ public class AppController implements GTFSController {
 //
 //    }
 
-    private Map<String, InputStream> unzip(ZipInputStream verZip) { //todo memory constraints are preventing this
+    private Map<String, InputStream> unzip(ZipInputStream verZip) throws IOException {
 
         Map<String, InputStream> result = new HashMap<>();
 
@@ -158,11 +163,7 @@ public class AppController implements GTFSController {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             int l;
 
-            try {
-                entry = verZip.getNextEntry();
-            } catch (IOException e) {
-                break;
-            }
+            entry = verZip.getNextEntry();//Might throw IOException
 
             if (entry == null) {
                 break;
@@ -189,7 +190,10 @@ public class AppController implements GTFSController {
     private ZipInputStream getGtfsZip(String v) throws IOException {
         String apiUrl = this.dsl.select(FEED_VERSION.URL).from(FEED_VERSION).where(FEED_VERSION.ID.eq(v)).fetchOne(FEED_VERSION.URL);
         Connection zipConnect = Jsoup.connect(apiUrl);
-        Connection.Response almostZipStream = zipConnect.ignoreContentType(true).execute();
+        Connection notEnoughBytes = zipConnect.ignoreContentType(true);
+        Connection.Request requestSize = notEnoughBytes.request();
+        requestSize.maxBodySize(1073741824);
+        Connection.Response almostZipStream = notEnoughBytes.request(requestSize).execute();
         ZipInputStream zis = new ZipInputStream(almostZipStream.bodyStream());
         return zis;
     }

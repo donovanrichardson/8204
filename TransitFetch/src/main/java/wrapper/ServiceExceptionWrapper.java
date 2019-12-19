@@ -58,7 +58,7 @@ public class ServiceExceptionWrapper extends OptionalTableWrapper<ServiceExcepti
             }
         }
         forService.reset();
-        dsl.loadInto(SERVICE).onDuplicateKeyIgnore().loadCSV(forService).fields(fields).nullString("").execute();
+        dsl.loadInto(SERVICE).commitAfter(10000).onDuplicateKeyIgnore().loadCSV(forService).fields(fields).nullString("").execute();
 
         super.dbImport(dsl, forExceptions);
     }
