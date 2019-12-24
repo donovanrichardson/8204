@@ -19,6 +19,13 @@ public class JobAccessor {
     DSLContext dsl;
     Scanner scan;
 
+    /**
+     * Provides an instance of this class which will output to the specified <code>PrintStream</code> and read from the specified <code>InputStream</code>.
+     *
+     * @param output specified <code>PrintStream</code>
+     * @param inputs specified <code>InputStream</code>
+     * @param dsl a <code>DSLContext</code> object the provides MySQL database access.
+     */
     public JobAccessor(PrintStream output, InputStream inputs, DSLContext dsl) {
         this.output = output;
         this.inputs = inputs;
@@ -26,6 +33,10 @@ public class JobAccessor {
         this.scan = new Scanner(this.inputs);
     }
 
+    /**
+     * Queries and manipulates database for jobs. Can be used for a command-line program whin this object uses standard input and standard output.
+     *
+     */
     public void run() {
         while(true){
             this.output.println("press n for new job, u for update job, or q for quit");
@@ -43,7 +54,7 @@ public class JobAccessor {
         }
     }
 
-    public void newJob() {
+    private void newJob() {
         this.output.println("enter the job name");
         String name = scan.nextLine();
 
@@ -97,7 +108,7 @@ public class JobAccessor {
 
     }
 
-    public void modJob(){
+    private void modJob(){
 
         String likeString = "";
 
@@ -138,7 +149,7 @@ public class JobAccessor {
 
     }
 
-    UInteger getId(Object ... messages){
+    private UInteger getId(Object ... messages){
         while(true){
             try{
                 for(Object i : messages){

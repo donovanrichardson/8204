@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class DSLSetup {
 
-    static String baseURL = "jdbc:mysql://localhost/jobs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false"; //&serverTimezone=EST
+    private static String baseURL = "jdbc:mysql://localhost/jobs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false"; //&serverTimezone=EST
 
     public static DSLContext get()throws SQLException {
         Scanner s = new Scanner(System.in);
@@ -28,6 +28,13 @@ public class DSLSetup {
         return dsl;
     }
 
+    /**
+     * Provides a <code>DSLContext</code> object for accessing a MySQL database.
+     * @param user Database username.
+     * @param pass Database password.
+     * @return
+     * @throws SQLException if unable to connect to the MySQL database.
+     */
     public static DSLContext get(String user, String pass) throws SQLException {
         Connection conn = DriverManager.getConnection(baseURL, user, pass); //the password is exposed lol
         Configuration conf = new DefaultConfiguration().set(conn).set(SQLDialect.MYSQL_8_0);
