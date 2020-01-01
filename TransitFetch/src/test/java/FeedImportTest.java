@@ -41,8 +41,8 @@ public class FeedImportTest extends AbstractTest {
         try {
             try {
                 this.setup();
-//                this.c.addFeeds(mexico);
-                this.c.addFeeds(sfmuni);
+                this.c.addFeeds(mexico);
+//                this.c.addFeeds(sfmuni);
             } catch (IOException | SQLException e) {
                 e.printStackTrace();
                 throw e;

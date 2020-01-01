@@ -34,7 +34,7 @@ public class AppController implements GTFSController {
     String dbuser;
     String dbpass;
     String apiKey;
-    DSLContext dsl;
+    public DSLContext dsl;
     private static final String[] order = {"agency.txt", "stops.txt", "routes.txt", "calendar.txt", "calendar_dates.txt", "shapes.txt", "trips.txt", "frequencies.txt", "stop_times.txt"};
 
     public AppController(String dbuser, String dbpass, String apiKey) throws SQLException {
@@ -44,7 +44,7 @@ public class AppController implements GTFSController {
 //        System.out.println(this.dbuser);
 //        System.out.println(this.dbpass);
 //        System.out.println(this.apiKey);
-        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/gtfs?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&autoCommit=false&relaxAutoCommit=true", this.dbuser, this.dbpass);
+        java.sql.Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/gtfs?autoReconnect=true&useSSL=false&useUnicode=true&useLegacyDatetimeCode=false&autoCommit=false&relaxAutoCommit=true", this.dbuser, this.dbpass); //In earlier version I was causing the time zones to be switched without warrant.
         Configuration conf = new DefaultConfiguration().set(conn).set(SQLDialect.MYSQL_8_0);
         ConnectionImpl cImpl = (ConnectionImpl)conf.connectionProvider().acquire();
         cImpl.getSession().getServerSession().setAutoCommit(false);
@@ -72,22 +72,15 @@ public class AppController implements GTFSController {
     }
 
     @Override
-    public void addFeedVersion(String feedId) throws IOException {
+    public void addFeedVersion(JSONObject feedVersion) throws IOException {
         FeedVersion fv = FEED_VERSION;
-        JSONObject versionsJson = null;
-        try {
-            versionsJson = getFeedJSON(feedId);
-        } catch (IOException e) {
-            System.out.println("Could not GET the GTFS versions");
-            throw e;
-        }
-        JSONObject latest = versionsJson.getJSONObject("results").getJSONArray("versions").getJSONObject(0);
-        String versionId = latest.getString("id");
-        ULong timestamp = ULong.valueOf(latest.getLong("ts"));
-        ULong size = ULong.valueOf(latest.getLong("size"));
-        String downloadUrl = latest.getString("url");
-        String start = latest.getJSONObject("d").getString("s");//these two will need to be cast to unsigned to be at all useful
-        String finish = latest.getJSONObject("d").getString("f");
+        String feedId = feedVersion.getJSONObject("f").getString("id");
+        String versionId = feedVersion.getString("id");
+        ULong timestamp = ULong.valueOf(feedVersion.getLong("ts"));
+        ULong size = ULong.valueOf(feedVersion.getLong("size"));
+        String downloadUrl = feedVersion.getString("url");
+        String start = feedVersion.getJSONObject("d").getString("s");//these two will need to be cast to unsigned to be at all useful
+        String finish = feedVersion.getJSONObject("d").getString("f");
 
         dsl.insertInto(fv, fv.ID, fv.FEED, fv.TIMESTAMP, fv.SIZE, fv.URL, fv.START, fv.FINISH).values(versionId, feedId, timestamp, size, downloadUrl, start, finish).execute();
 
