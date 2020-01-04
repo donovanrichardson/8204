@@ -4,36 +4,15 @@
 package com.schema;
 
 
-import com.schema.tables.Agency;
-import com.schema.tables.Feed;
-import com.schema.tables.FeedVersion;
-import com.schema.tables.Frequency;
-import com.schema.tables.Route;
-import com.schema.tables.Service;
-import com.schema.tables.ServiceException;
-import com.schema.tables.Shape;
-import com.schema.tables.Stop;
-import com.schema.tables.StopTime;
-import com.schema.tables.Trip;
-import com.schema.tables.records.AgencyRecord;
-import com.schema.tables.records.FeedRecord;
-import com.schema.tables.records.FeedVersionRecord;
-import com.schema.tables.records.FrequencyRecord;
-import com.schema.tables.records.RouteRecord;
-import com.schema.tables.records.ServiceExceptionRecord;
-import com.schema.tables.records.ServiceRecord;
-import com.schema.tables.records.ShapeRecord;
-import com.schema.tables.records.StopRecord;
-import com.schema.tables.records.StopTimeRecord;
-import com.schema.tables.records.TripRecord;
-
-import javax.annotation.Generated;
-
+import com.schema.tables.*;
+import com.schema.tables.records.*;
 import org.jooq.ForeignKey;
 import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.Internal;
 import org.jooq.types.UInteger;
+
+import javax.annotation.Generated;
 
 
 /**
@@ -87,6 +66,7 @@ public class Keys {
     public static final ForeignKey<ShapeRecord, FeedVersionRecord> SHAPE_FEED_VERSION_FK = ForeignKeys0.SHAPE_FEED_VERSION_FK;
     public static final ForeignKey<StopRecord, StopRecord> STOP_IBFK_1 = ForeignKeys0.STOP_IBFK_1;
     public static final ForeignKey<StopRecord, FeedVersionRecord> STOP_FEED_VERSION_FK = ForeignKeys0.STOP_FEED_VERSION_FK;
+    public static final ForeignKey<StopTimeRecord, StopRecord> STOP_TIME_IBFK_1 = ForeignKeys0.STOP_TIME_IBFK_1;
     public static final ForeignKey<StopTimeRecord, FeedVersionRecord> STOP_TIME_FEED_VERSION_FK = ForeignKeys0.STOP_TIME_FEED_VERSION_FK;
     public static final ForeignKey<TripRecord, RouteRecord> TRIP_IBFK_1 = ForeignKeys0.TRIP_IBFK_1;
     public static final ForeignKey<TripRecord, ServiceRecord> TRIP_IBFK_2 = ForeignKeys0.TRIP_IBFK_2;
@@ -127,6 +107,7 @@ public class Keys {
         public static final ForeignKey<ShapeRecord, FeedVersionRecord> SHAPE_FEED_VERSION_FK = Internal.createForeignKey(com.schema.Keys.KEY_FEED_VERSION_PRIMARY, Shape.SHAPE, "shape_feed_version_fk", Shape.SHAPE.FEED_VERSION);
         public static final ForeignKey<StopRecord, StopRecord> STOP_IBFK_1 = Internal.createForeignKey(com.schema.Keys.KEY_STOP_PRIMARY, Stop.STOP, "stop_ibfk_1", Stop.STOP.PARENT_STATION);
         public static final ForeignKey<StopRecord, FeedVersionRecord> STOP_FEED_VERSION_FK = Internal.createForeignKey(com.schema.Keys.KEY_FEED_VERSION_PRIMARY, Stop.STOP, "stop_feed_version_fk", Stop.STOP.FEED_VERSION);
+        public static final ForeignKey<StopTimeRecord, StopRecord> STOP_TIME_IBFK_1 = Internal.createForeignKey(com.schema.Keys.KEY_STOP_PRIMARY, StopTime.STOP_TIME, "stop_time_ibfk_1", StopTime.STOP_TIME.STOP_ID);
         public static final ForeignKey<StopTimeRecord, FeedVersionRecord> STOP_TIME_FEED_VERSION_FK = Internal.createForeignKey(com.schema.Keys.KEY_FEED_VERSION_PRIMARY, StopTime.STOP_TIME, "stop_time_feed_version_fk", StopTime.STOP_TIME.FEED_VERSION);
         public static final ForeignKey<TripRecord, RouteRecord> TRIP_IBFK_1 = Internal.createForeignKey(com.schema.Keys.KEY_ROUTE_PRIMARY, Trip.TRIP, "trip_ibfk_1", Trip.TRIP.ROUTE_ID);
         public static final ForeignKey<TripRecord, ServiceRecord> TRIP_IBFK_2 = Internal.createForeignKey(com.schema.Keys.KEY_SERVICE_PRIMARY, Trip.TRIP, "trip_ibfk_2", Trip.TRIP.SERVICE_ID);

@@ -33,7 +33,7 @@ import java.util.List;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class StopTime extends TableImpl<StopTimeRecord> {
 
-    private static final long serialVersionUID = -768176575;
+    private static final long serialVersionUID = -2037361942;
 
     /**
      * The reference instance of <code>gtfs.stop_time</code>
@@ -149,7 +149,7 @@ public class StopTime extends TableImpl<StopTimeRecord> {
      */
     @Override
     public List<Index> getIndexes() {
-        return Arrays.<Index>asList(Indexes.STOP_TIME_PRIMARY, Indexes.STOP_TIME_STOP_TIME_FEED_VERSION_FK);
+        return Arrays.<Index>asList(Indexes.STOP_TIME_PRIMARY, Indexes.STOP_TIME_STOP_ID, Indexes.STOP_TIME_STOP_TIME_FEED_VERSION_FK);
     }
 
     /**
@@ -173,7 +173,11 @@ public class StopTime extends TableImpl<StopTimeRecord> {
      */
     @Override
     public List<ForeignKey<StopTimeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<StopTimeRecord, ?>>asList(Keys.STOP_TIME_FEED_VERSION_FK);
+        return Arrays.<ForeignKey<StopTimeRecord, ?>>asList(Keys.STOP_TIME_IBFK_1, Keys.STOP_TIME_FEED_VERSION_FK);
+    }
+
+    public Stop stop() {
+        return new Stop(this, Keys.STOP_TIME_IBFK_1);
     }
 
     public FeedVersion feedVersion() {

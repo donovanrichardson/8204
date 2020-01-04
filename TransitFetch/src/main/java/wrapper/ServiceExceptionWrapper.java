@@ -49,8 +49,12 @@ public class ServiceExceptionWrapper extends OptionalTableWrapper<ServiceExcepti
         forService.mark(2000);
         Scanner s = new Scanner(forService);
         String[] columns = s.nextLine().split("\"*\\s*,\\s*\"*"); //todo how to do this correctly
+        ArrayList<String> formCol = new ArrayList<>();
+        for (String c:columns){
+            formCol.add(c.replaceAll("\"",""));
+        }
         List<Field<?>> fields = new ArrayList();
-        for (String col : columns){
+        for (String col : formCol){
             if(col.equals("service_id")){
                 fields.add(SERVICE.SERVICE_ID);
             } else {

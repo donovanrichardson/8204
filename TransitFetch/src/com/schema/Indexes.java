@@ -4,23 +4,12 @@
 package com.schema;
 
 
-import com.schema.tables.Agency;
-import com.schema.tables.Feed;
-import com.schema.tables.FeedVersion;
-import com.schema.tables.Frequency;
-import com.schema.tables.Route;
-import com.schema.tables.Service;
-import com.schema.tables.ServiceException;
-import com.schema.tables.Shape;
-import com.schema.tables.Stop;
-import com.schema.tables.StopTime;
-import com.schema.tables.Trip;
-
-import javax.annotation.Generated;
-
+import com.schema.tables.*;
 import org.jooq.Index;
 import org.jooq.OrderField;
 import org.jooq.impl.Internal;
+
+import javax.annotation.Generated;
 
 
 /**
@@ -65,6 +54,7 @@ public class Indexes {
     public static final Index STOP_PRIMARY = Indexes0.STOP_PRIMARY;
     public static final Index STOP_STOP_FEED_VERSION_FK = Indexes0.STOP_STOP_FEED_VERSION_FK;
     public static final Index STOP_TIME_PRIMARY = Indexes0.STOP_TIME_PRIMARY;
+    public static final Index STOP_TIME_STOP_ID = Indexes0.STOP_TIME_STOP_ID;
     public static final Index STOP_TIME_STOP_TIME_FEED_VERSION_FK = Indexes0.STOP_TIME_STOP_TIME_FEED_VERSION_FK;
     public static final Index TRIP_PRIMARY = Indexes0.TRIP_PRIMARY;
     public static final Index TRIP_ROUTE_ID_2 = Indexes0.TRIP_ROUTE_ID_2;
@@ -103,6 +93,7 @@ public class Indexes {
         public static Index STOP_PRIMARY = Internal.createIndex("PRIMARY", Stop.STOP, new OrderField[] { Stop.STOP.STOP_ID }, true);
         public static Index STOP_STOP_FEED_VERSION_FK = Internal.createIndex("stop_feed_version_fk", Stop.STOP, new OrderField[] { Stop.STOP.FEED_VERSION }, false);
         public static Index STOP_TIME_PRIMARY = Internal.createIndex("PRIMARY", StopTime.STOP_TIME, new OrderField[] { StopTime.STOP_TIME.TRIP_ID, StopTime.STOP_TIME.STOP_SEQUENCE, StopTime.STOP_TIME.FEED_VERSION }, true);
+        public static Index STOP_TIME_STOP_ID = Internal.createIndex("stop_id", StopTime.STOP_TIME, new OrderField[] { StopTime.STOP_TIME.STOP_ID }, false);
         public static Index STOP_TIME_STOP_TIME_FEED_VERSION_FK = Internal.createIndex("stop_time_feed_version_fk", StopTime.STOP_TIME, new OrderField[] { StopTime.STOP_TIME.FEED_VERSION }, false);
         public static Index TRIP_PRIMARY = Internal.createIndex("PRIMARY", Trip.TRIP, new OrderField[] { Trip.TRIP.TRIP_ID, Trip.TRIP.FEED_VERSION }, true);
         public static Index TRIP_ROUTE_ID_2 = Internal.createIndex("route_id_2", Trip.TRIP, new OrderField[] { Trip.TRIP.ROUTE_ID }, false);
