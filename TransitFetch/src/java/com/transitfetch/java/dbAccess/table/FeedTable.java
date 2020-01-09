@@ -9,10 +9,7 @@ import org.jooq.impl.SQLDataType;
 import org.jooq.types.UByte;
 import org.jooq.types.UInteger;
 
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.schema.tables.Route.ROUTE;
 import static com.schema.tables.Service.SERVICE;
@@ -97,12 +94,13 @@ public class FeedTable {
 
         if (this.route != null){
             return withoutRoute
-                    .and(STOP_TIME.TRIP_ID.in(dsl.select(TRIP.TRIP_ID)
+                    .and(STOP_TIME.TRIP_ID.in(dsl.select(TRIP.TRIP_ID).from(TRIP)
                             .where(TRIP.ROUTE_ID.eq(this.route))
                             .and(TRIP.FEED_VERSION.eq(this.feedVersion)))).orderBy(STOP_TIME.DEPARTURE_TIME).fetchMaps();
         } else return withoutRoute.orderBy(STOP_TIME.DEPARTURE_TIME).fetchMaps();
 
     }
+    //todo (a few lines above) .and(STOP_TIME.TRIP_ID.in(dsl.select(TRIP.TRIP_ID).from(TRIP)... this used to not have "from(TRIP)" in it.... the syntax error popped out
 
     enum Format{
         JSON, PLAIN
@@ -265,6 +263,10 @@ public class FeedTable {
         }else return withoutRoute;
 //
 
+    }
+
+    public Calendar getDate(){
+        return (Calendar)date.clone();
     }
 
 
