@@ -1,5 +1,3 @@
-package test.java;
-
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;

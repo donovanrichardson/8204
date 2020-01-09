@@ -1,6 +1,6 @@
-package test.java;
 
-import main.java.FeedTable;
+
+import com.transitfetch.java.dbAccess.table.FeedTable;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

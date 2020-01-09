@@ -1,9 +1,7 @@
-package test.java;
-
-import main.java.AppController;
-import main.java.FeedQuery;
-import main.java.GTFSController;
-import main.java.IdFeedQuery;
+import com.transitfetch.java.dbAccess.gtfsController.AppController;
+import com.transitfetch.java.dbAccess.feedQuery.FeedQuery;
+import com.transitfetch.java.dbAccess.gtfsController.GTFSController;
+import com.transitfetch.java.dbAccess.feedQuery.IdFeedQuery;
 import org.junit.jupiter.api.Test;
 
 import java.io.FileNotFoundException;

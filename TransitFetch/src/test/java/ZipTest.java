@@ -1,4 +1,3 @@
-package test.java;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

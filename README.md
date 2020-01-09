@@ -8,4 +8,4 @@ Since then, I've added a few more projects, detailed below.
 
 [Job-DB](https://github.com/donovanrichardson/donovanrichardson.github.io/tree/master/job-db), a command line program that keeps track of job applications in a MySQL database.
 
-[A timetable program](https://github.com/donovanrichardson/donovanrichardson.github.io/tree/master/TransitFetch) in progress, aiming to create timetables like [this one](http://hiyoshizaka.tokyo/timetable_train_shirokanetakanawa.html) or [this one](https://www.dropbox.com/s/s4trkojk410ya8j/lirrschedule.docx?dl=0) for transit routes, using GTFS data.
+[A timetable program](https://github.com/donovanrichardson/donovanrichardson.github.io/tree/master/TransitFetch) in progress, aiming to create timetables like [this one](http://hiyoshizaka.tokyo/timetable_train_shirokanetakanawa.html) or [this one](https://www.dropbox.com/s/s4trkojk410ya8j/lirrschedule.docx?dl=0) for transit routes, using GTFS data from the [TransitFeeds](https://transitfeeds.com/) API.

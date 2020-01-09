@@ -1,5 +1,3 @@
-package test.java;
-
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.Field;
@@ -7,6 +5,7 @@ import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -24,7 +23,7 @@ import static com.schema.tables.Agency.AGENCY;
 import static org.junit.jupiter.api.Assertions.fail;
 
 
-public class ApiAndDbAccessTest extends AbstractTest{
+public class ApiAndDbAccessTest extends AbstractTest {
 
     @Test
     public void accessExistsTest(){
@@ -58,7 +57,7 @@ public class ApiAndDbAccessTest extends AbstractTest{
                 System.out.println(feed.optString("t"));
             }
             assert(feeds.length() > 11);
-        }catch(IOException e){
+        }catch(IOException | JSONException e){
             fail();
         }
     }

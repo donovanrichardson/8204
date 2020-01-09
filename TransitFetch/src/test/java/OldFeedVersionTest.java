@@ -1,9 +1,9 @@
-package test.java;
 
-import main.java.AppController;
-import main.java.FeedQuery;
-import main.java.GTFSController;
-import main.java.VersionFeedQuery;
+
+import com.transitfetch.java.dbAccess.gtfsController.AppController;
+import com.transitfetch.java.dbAccess.feedQuery.FeedQuery;
+import com.transitfetch.java.dbAccess.gtfsController.GTFSController;
+import com.transitfetch.java.dbAccess.feedQuery.VersionFeedQuery;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
