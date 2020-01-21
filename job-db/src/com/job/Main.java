@@ -11,8 +11,9 @@ public class Main {
         Scanner s = new Scanner(System.in);
         System.out.println("provide db username");
         String user = s.nextLine();
-        System.out.println("provide db password");
+        System.out.println("provide db password");//todo what if incorrect credentials
         String pass = s.nextLine();
+        s.close();
         try{
             DSLContext db = DSLSetup.get(user, pass);
             JobAccessor ja = new JobAccessor(System.out, System.in, db);

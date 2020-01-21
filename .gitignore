@@ -4,3 +4,5 @@ job-db/src/META-INF/MANIFEST.MF
 target/
 ThreadProject/
 *.zip
+GTime/
+springProjects/

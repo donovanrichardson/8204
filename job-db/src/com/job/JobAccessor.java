@@ -52,6 +52,7 @@ public class JobAccessor {
                 continue; //superfluous code
             }
         }
+        scan.close();
     }
 
     private void newJob() {
