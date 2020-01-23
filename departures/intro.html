@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>DR</title>
+        <meta name="description" content="Donovan Richardson">
+        <link rel="stylesheet" href="main.css">
+        <link href="https://fonts.googleapis.com/css?family=VT323&display=swap" rel="stylesheet"> 
+        <script src="source.js"></script>
+    </head>
+    
+    <body>
+
+        <!--        centred-->
+        <div class=heading><h1 class="departures">Departures</h1></div>
+        <div class=margin>
+            <div class="right" id=coolidge>
+                <img src="coolidge.jpg" alt="Coolidge Corner May 2019"  width=140>
+                <p class="caption centered"> Taken when I was at Coolidge Corner, Brookline MA, May 2019</p>
+            </div>
+            <p>
+                In December I started creating a command line program and schema as well as an API to create departure timetables for origin-destination pairs. I had a few motivations for this; including that it was a reason to using MySQL and develop an API with Java Spring. The main motivation for it was that I had manually created such a timetable a few months earlier and I wanted to be able to do this quickly and automatically using publicly available delimited text data. I also had seen departure timetables often when I was in Japan in 2017, and think that they are a useful way to present information about transit schedules. As of now, I have created an API that returns JSON representations of departure times for origin-destination pairs in a transit system. Below I’ll give a summary of what I’ve done and how it works.
+            </p>
+        </div>
+
+        <div>
+            <h1 class=schema>Schema</h1>
+            <p>Currently, I am storing transit data obtained from <a href="https://openmobilitydata.org/">OpenMobilityData</a> in an AWS database. The data that OpenMobilityData hosts is in a format called <a href="https://developers.google.com/transit/gtfs/reference">General Transit Feed Specification</a> (GTFS). Developed by Google in 2006, GTFS uses delimited .txt files to document and publish transit trip schedules.</p>
+
+
+        </div>
+            
+        <div class="centered">
+            <img src="diffs.png" alt="Differences between my schema and the GTFS spec.">
+            <p class="caption centered"> My schema leaves out several parts of the GTFS spec, and substitutes <code>service</code> and <code>service_exception</code> for <code>calendar</code> and <code>calendar_dates</code>.</p>
+        </div>
+
+        <p>
+            My schema includes tables corresponding to the five mandatory files in a GTFS feed (<code>agency.txt</code>, <code>routes.txt</code>, <code>trips.txt</code>, <code>stop_times.txt</code>, and <code>stops.txt</code>), as well as two optional files <code>shapes.txt</code> and <code>frequencies.txt</code>.
+        </p>
+        <p>
+            The files <code>calendar.txt</code> and <code>calendar_dates.txt</code> are semi-optional and thus present a complication in that GTFS requires that one of these two tables be present but doesn’t specify which one. The requirement of GTFS is only that feeds define services which are each associated with all trips on a given set of days, which both of these tables can do on their own. For example, an agency which provides only <code>calendar.txt</code> might provide weekday services and less-frequent weekend services and never deviate from this schedule; another which publishes only <code>calendar_dates.txt</code> might run different service schedules throughout the week in a way that doesn’t fit into a regular weekly schedule. Most agencies publish both <code>calendar.txt</code> and <code>calendar_dates.txt</code> because they run services that follow regular weekly schedule patterns, with some deviations for holidays or planned service disruptions. Requiring only one of either <code>calendar.txt</code> or <code>calendar_dates.txt</code> allows GTFS feeds to accommodate these three situations, covering the universe of transit scheduling sufficiently. But for a relational database adaptation of GTFS, this solution is insufficient because the table which defines a service must be known in order to create a foreign key relationship between a <code>service</code> and a <code>trip</code>. To remedy this, all services defined by a feed, whether in <code>calendar.txt</code> or <code>calendar_dates.txt</code> will appear as records in the <code>service</code> table according to my schema. Exceptions in <code>calendar_dates.txt</code> will appear as records in my <code>service_exception</code> table.
+        </p>
+
+        <div class="centered">
+            <img src="feed_id.png" alt="The tables feed and feed_version allow the database to differentiate data from different feeds and feed versions.">
+            <p class="caption centered"> The tables <code>feed</code> and <code>feed_version</code> allow the database to differentiate data from different feeds and feed versions.</p>
+        </div>
+
+        <p>
+            Finally, I add two more tables: <code>feed</code> and <code>feed_version</code>. Records in  <code>feed</code> represent the different feeds hosted on OpenMobilityData. One might represent the Long Island Railroad, another might represent WMATA in the Washington, DC area, and another might represent the San Francisco Muni Metro. The table <code>feed_version</code> represents different versions of feeds. Agencies typically post one version of a feed that provides complete scheduling data for several months into the future, and then publish a new version reaching even farther into the future while the old version’s schedule data is still current. The <code>feed_version</code> table allows multiple versions of a feed to exist in the database without having to delete an old feed version every time a new version is available, since some agencies publish multiple versions of a feed per week. The column <code>feed_version</code> in the other nine tables refers to <code>id</code> field in the table <code>feed_version</code> and also allows the API to disambiguate between unrelated feeds in the database. <!-- Since many agencies will have a stop or route with an ID of “1”, feed_version is often the only way to disambiguate between different records with the same ID.  -->As part of my command-line function below, the program updates the <code>latest_feed_version</code> field of <code>feed</code>. The API is later able to reference this field in order to access only the scheduling data for the most recent version of a feed. 
+        </p>
+
+        <h1 class=loading>Loading GTFS into Database</h1>
+
+        <p>
+            Here are some screenshots of the command line program in action.
+        </p>
+        
+        <p>
+            It first asks for the database username and password (the host address is already known by the program) and accesses the database on AWS.
+        </p>
+
+        <div class="centered">
+            <img src="username-password.png" alt="Providing username and password to the command line.">
+            <p class="caption centered">Providing username and password to the command line.</p>
+        </div>
+
+        <p>
+            It then asks for the ID of the feed version I want to add. Below, I add the latest feed version id of the MBTA GTFS feed (on January 20th, this was the January 16th 2020 version). 
+        </p>
+
+        <div class="centered">
+            <img src="cl-add-feed.png" alt="Entering the feed version ID">
+            <p class="caption centered">Entering the feed version ID.</p>
+        </div>
+
+        <p>
+            Whenever a feed version from a new feed is added (e.g. I add a TfL GTFS feed version, when I do not yet have a TfL version in the database), the program automatically adds a record for that feed and associates this new feed_version record with this new feed. In this case, I had already loaded an older version of the MBTA GTFS feed, so this new feed_version record will be associated with the pre-existing feed record. The command-line program then prints the many, many insert statements (in bulk sets of 10000 records), taking about five to ten minutes. Now, the API is ready to query this data from the database.
+        </p>
+
+        <h1 class=querying>Querying the database</h1>
+        <p>
+            When I was living in Boston, I knew someone who used the commuter rail to get from Waltham to Cambridge for work. Let’s see if we can get a list of departing trains that she might take on Massachusetts' MBTA Commuter Rail.
+        </p>
+
+        <div class="centered">
+            <img src="bos-routes.png" alt="JSON output for routes in the MBTA system">
+            <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/routes">https://deparch.herokuapp.com/boston/routes</a></p>
+            <p class="caption centered">JSON output for routes in the MBTA system</p>
+        </div>
+
+        <p>
+            The train from Waltham to Cambridge is on the Fitchburg Line, which goes in a northwesterly direction from North Station in Boston, through Cambridge and Waltham, to the city of Fitchburg in north-central Massachusetts.
+        </p>
+
+
+
+        <div class="centered">
+            <img src="bos-routes.png" alt="JSON output for routes in the MBTA system">
+            <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/routes">https://deparch.herokuapp.com/boston/routes</a></p>
+            <p class="caption centered">JSON output for routes in the MBTA system</p>
+        </div>
+
+        <p>
+            The train from Waltham to Cambridge is on the Fitchburg Line, which goes in a northwesterly direction from North Station in Boston, through Cambridge and Waltham, to the city of Fitchburg in north-central Massachusetts.
+        </p>
+
+        <div class="centered">
+            <img src="cr-fitchburg.png" alt="JSON output for stops on the Fitchburg Line">
+            <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/stops?routeId=CR-Fitchburg">https://deparch.herokuapp.com/boston/stops?routeId=CR-Fitchburg</a></p>
+            <p class="caption centered">JSON output for stops on the Fitchburg Line</p>
+        </div>
+
+        <p>
+            Through the result of the next query is a list of stops on the Fitchburg Line.
+        </p>
+
+        <div class="centered">
+            <img src="bos-routes.png" alt="JSON output for stops reachable from Waltham on the Fitchburg Line">
+            <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/dests?routeId=CR-Fitchburg&origin=Waltham">https://deparch.herokuapp.com/boston/dests?routeId=CR-Fitchburg&origin=Waltham</a></p>
+            <p class="caption centered">JSON output for stops reachable from Waltham on the Fitchburg Line</p>
+        </div>
+
+        <p>
+            Now we can see all the stops that can be reached from Waltham on this Line. The one station closest to work is Porter Square in Cambridge.
+        </p>
+
+
+
+
+
+        
+        <div class=margin>
+            <!-- <div class="right waltham">
+                <img src="normal-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=280>
+                <p class="caption centered"> The MBTA Commuter rail schedule table corresponding to this result</p>
+            </div> -->
+            <div class="left waltham">
+                <img src="normal-waltham.png" alt="JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 10th"  width=280>
+                <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=10">https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=10</a></p>
+                <p class="caption centered"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 10th</p>
+            </div>
+            
+            <img src="normal-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=280>
+            <p class="caption centered"> The MBTA Commuter rail schedule table corresponding to this result</p>
+            <p>
+                On a normal Monday, 18 trips depart from Waltham and stop at Porter Square. The first three depart at 6:05, 7:01, and 7:55 on Monday February 10th. This can be confirmed by looking at the <a href="https://web.archive.org/web/20200122223807/https://cdn.mbta.com/sites/default/files/route_pdfs/2019-fall/2019-10-21-cr-fitchburg-accessible.pdf">commuter rail schedule</a> current for Winter 2020.
+            </p>
+        </div>
+
+        <div class=margin>
+            <div class="right waltham">
+                <img src="presidents-waltham.png" alt="JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day"  width=280>
+                <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=17">https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=17</a></p>
+                <p class="caption centered"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day</p>
+            </div>
+            
+            <img src="presidents-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=280>
+            <p class="caption centered"> The MBTA Commuter rail schedule table corresponding to this result</p>
+            <p>
+                February 17th, the next Monday, is Presidents’ Day, and Fitchburg Line service runs on a Saturday schedule.
+            </p>
+            <p>
+                Here we see the first trips depart from Waltham at 7:39, 9:54, and 11:59. Only seven trains bound for Porter Square will depart from Waltham on this day.
+            </p>
+        </div>
+
+        <p>
+            The next step will be for me to use this JSON output to create nicely formatted tabular output for a departure timetable. A few examples of this are below, in the “Motivation” section
+        </p>
+
+    </body>
+</html>
