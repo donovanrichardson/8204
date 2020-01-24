@@ -14,16 +14,17 @@
     <body>
 
         <!--        centred-->
-        <div class=heading><h1 class="departures">Departures</h1></div>
-        <div class=margin>
-            <div class="right" id=coolidge>
-                <img src="coolidge.jpg" alt="Coolidge Corner May 2019"  width=140>
-                <p class="caption centered"> Taken when I was at Coolidge Corner, Brookline MA, May 2019</p>
+        <div class=heading>
+            <h1 class="departures">Departures</h1></div>
+            <div class=margin>
+                <div class="right" id=coolidge>
+                    <img src="coolidge-web.jpg" alt="Coolidge Corner May 2019"  width=140>
+                    <p class="caption centered"> Taken when I was at Coolidge Corner, Brookline MA, May 2019    </p>
+                </div>
+                <p>
+                    In December I started creating a command line program and schema as well as an API to create departure timetables for origin-destination pairs. I had a few motivations for this; including that it was a reason to using MySQL and develop an API with Java Spring. The main motivation for it was that I had manually created such a timetable a few months earlier and I wanted to be able to do this quickly and automatically using publicly available delimited text data. I also had seen departure timetables often when I was in Japan in 2017, and think that they are a useful way to present information about transit schedules. As of now, I have created an API that returns JSON representations of departure times for origin-destination pairs in a transit system. Below I’ll give a summary of what I’ve done and how it works.
+                </p>
             </div>
-            <p>
-                In December I started creating a command line program and schema as well as an API to create departure timetables for origin-destination pairs. I had a few motivations for this; including that it was a reason to using MySQL and develop an API with Java Spring. The main motivation for it was that I had manually created such a timetable a few months earlier and I wanted to be able to do this quickly and automatically using publicly available delimited text data. I also had seen departure timetables often when I was in Japan in 2017, and think that they are a useful way to present information about transit schedules. As of now, I have created an API that returns JSON representations of departure times for origin-destination pairs in a transit system. Below I’ll give a summary of what I’ve done and how it works.
-            </p>
-        </div>
 
         <div>
             <h1 class=schema>Schema</h1>
@@ -50,7 +51,7 @@
         </div>
 
         <p>
-            Finally, I add two more tables: <code>feed</code> and <code>feed_version</code>. Records in  <code>feed</code> represent the different feeds hosted on OpenMobilityData. One might represent the Long Island Railroad, another might represent WMATA in the Washington, DC area, and another might represent the San Francisco Muni Metro. The table <code>feed_version</code> represents different versions of feeds. Agencies typically post one version of a feed that provides complete scheduling data for several months into the future, and then publish a new version reaching even farther into the future while the old version’s schedule data is still current. The <code>feed_version</code> table allows multiple versions of a feed to exist in the database without having to delete an old feed version every time a new version is available, since some agencies publish multiple versions of a feed per week. The column <code>feed_version</code> in the other nine tables refers to <code>id</code> field in the table <code>feed_version</code> and also allows the API to disambiguate between unrelated feeds in the database. <!-- Since many agencies will have a stop or route with an ID of “1”, feed_version is often the only way to disambiguate between different records with the same ID.  -->As part of my command-line function below, the program updates the <code>latest_feed_version</code> field of <code>feed</code>. The API is later able to reference this field in order to access only the scheduling data for the most recent version of a feed. 
+            Finally, I add two more tables: <code>feed</code> and <code>feed_version</code>. Records in  <code>feed</code> represent the different feeds hosted on OpenMobilityData. One might represent the Long Island Rail Road, another might represent WMATA in the Washington, DC area, and another might represent the San Francisco Muni Metro. The table <code>feed_version</code> represents different versions of feeds. Agencies typically post one version of a feed that provides complete scheduling data for several months into the future, and then publish a new version reaching even farther into the future while the old version’s schedule data is still current. The <code>feed_version</code> table allows multiple versions of a feed to exist in the database without having to delete an old feed version every time a new version is available, since some agencies publish multiple versions of a feed per week. The column <code>feed_version</code> in the other nine tables refers to <code>id</code> field in the table <code>feed_version</code> and also allows the API to disambiguate between unrelated feeds in the database. <!-- Since many agencies will have a stop or route with an ID of “1”, feed_version is often the only way to disambiguate between different records with the same ID.  -->As part of my command-line function below, the program updates the <code>latest_feed_version</code> field of <code>feed</code>. The API is later able to reference this field in order to access only the scheduling data for the most recent version of a feed. 
         </p>
 
         <h1 class=loading>Loading GTFS into Database</h1>
@@ -124,38 +125,47 @@
             <p class="caption centered">JSON output for stops reachable from Waltham on the Fitchburg Line</p>
         </div>
 
-        <p>
+        <p class = "left half">
             Now we can see all the stops that can be reached from Waltham on this Line. The one station closest to work is Porter Square in Cambridge.
         </p>
 
+        <p class = "right half">
+            On a normal Monday, 18 trips depart from Waltham and stop at Porter Square. The first three depart at 6:05, 7:01, and 7:55 on Monday February 10th. This can be confirmed by looking at the <a href="https://web.archive.org/web/20200122223807/https://cdn.mbta.com/sites/default/files/route_pdfs/2019-fall/2019-10-21-cr-fitchburg-accessible.pdf">commuter rail schedule</a> current for Winter 2020.
+        </p>
 
-
-
-
-        
         <div class=margin>
-            <!-- <div class="right waltham">
-                <img src="normal-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=280>
-                <p class="caption centered"> The MBTA Commuter rail schedule table corresponding to this result</p>
-            </div> -->
-            <div class="left waltham">
-                <img src="normal-waltham.png" alt="JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 10th"  width=280>
-                <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=10">https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=10</a></p>
-                <p class="caption centered"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 10th</p>
-            </div>
+            <img src="normal-waltham.png" alt="JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 10th"  width=500>
+            <p class="caption centered waltham"><a href="https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=10">https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=10</a></p>
+            <p class="caption centered waltham"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 10th</p>
+           
             
-            <img src="normal-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=280>
+            <img src="normal-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=500>
             <p class="caption centered"> The MBTA Commuter rail schedule table corresponding to this result</p>
-            <p>
-                On a normal Monday, 18 trips depart from Waltham and stop at Porter Square. The first three depart at 6:05, 7:01, and 7:55 on Monday February 10th. This can be confirmed by looking at the <a href="https://web.archive.org/web/20200122223807/https://cdn.mbta.com/sites/default/files/route_pdfs/2019-fall/2019-10-21-cr-fitchburg-accessible.pdf">commuter rail schedule</a> current for Winter 2020.
-            </p>
         </div>
 
+        <p class = "left half">
+            February 17th, the next Monday, is Presidents’ Day, and Fitchburg Line service runs on a Saturday schedule.
+        </p>
+
+        <p class = "right half">
+            Here we see the first trips depart from Waltham at 7:39, 9:54, and 11:59. Only seven trains bound for Porter Square will depart from Waltham on this day.
+        </p>
+
         <div class=margin>
+            <img src="presidents-waltham.png" alt="JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day."  width=500>
+            <p class="caption centered waltham"><a href="https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=17">https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=17</a></p>
+            <p class="caption centered waltham"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day.</p>
+           
+            
+            <img src="presidents-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=500>
+            <p class="caption centered"> The MBTA Commuter rail schedule table corresponding to this result</p>
+        </div>
+
+        <!-- <div class=margin>
             <div class="right waltham">
                 <img src="presidents-waltham.png" alt="JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day"  width=280>
                 <p class="caption centered"><a href="https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=17">https://deparch.herokuapp.com/boston/timetable?routeId=CR-Fitchburg&origin=Waltham&dest=Porter%20Square&year=2020&month=2&date=17</a></p>
-                <p class="caption centered"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day</p>
+                <p class="caption centered"> JSON output for departures from Waltham to Porter Square on the Fitchburg Line on Monday February 17th, Presidents' Day.</p>
             </div>
             
             <img src="presidents-waltham-official.png" alt="The MBTA Commuter rail schedule table corresponding to this result"  width=280>
@@ -166,10 +176,32 @@
             <p>
                 Here we see the first trips depart from Waltham at 7:39, 9:54, and 11:59. Only seven trains bound for Porter Square will depart from Waltham on this day.
             </p>
-        </div>
+        </div> -->
 
         <p>
-            The next step will be for me to use this JSON output to create nicely formatted tabular output for a departure timetable. A few examples of this are below, in the “Motivation” section
+            The next step will be for me to use this JSON output to create nicely formatted tabular output for a departure timetable. A few examples of this are below.
+        </p>
+
+        <div class=heading>
+            <h1 class="motivation">Motivation</h1></div>
+        <div>
+        <img src="murasaki-web.jpg" alt="Departure timetable for Murasaki Station, Fukuoka Prefecture, Japan."  width=440>
+        <p class="caption centered"> 
+            This file is licensed under the 
+                <a href="https://en.wikipedia.org/wiki/en:Creative_Commons" class="extiw" title="w:en:Creative Commons">Creative Commons</a> 
+                <a rel="nofollow" class="external text" href="https://creativecommons.org/licenses/by-sa/3.0/deed.en">Attribution-Share Alike 3.0 Unported</a> license.
+                <br>
+            Author: <a href="/wiki/User:%E3%81%9D%E3%82%89%E3%81%BF%E3%81%BF" title="User:そらみみ">そらみみ(Soramimi)</a>    </p>
+        <p>
+            Above is a picture of the timetables for trains heading to Fukuoka Tenjin Station from Murasaki Station in Fukuoka Prefecture, Japan. On the left side of each timetable is the hour number for each departure; on the right follow the minute numbers for each departure. It is posted in a visible part of the station and gives passengers information on various types of express services (indicated by the red and green dots) and terminal points (the last stops after the yellow number terminate early). It’s useful because it can be printed easily for commuter use and has a density of information but while also being concise; practically, I only need to know when my train will depart or arrive, not the departure times for intermediate stations.
+        </p>
+        <img src="lirr.jpg" alt="Timetable for Long Island Rail Road Port Jefferson Branch.">
+        <p>
+            This is a screenshot of the Port Jefferson branch timetable as it appears on my computer screen. It’s long and unwieldy, containing departure and arrival information for 25 stops. It’s not printer-friendly and takes a long time to load on a cell-phone connection. To show the whole timetable on this page, I’ve zoomed out, making it totally illegible. Google Maps is good if you have a particular departure or arrival time in mind, but if you would like a quick reference for  a wide range of departure times, this timetable is your best bet as the Long Island Rail Road does not publish departure timetable like the one above for Murasaki Station. Compared to a concise departure timetable, the official timetable is not a particularly user-friendly solution.
+        </p>
+        <img class = tt src="departure-pj.png" alt="Westbound departure timetable for Huntington Station on the Port Jefferson Branch of the Long Island Rail Road.">
+        <p>
+            One day a few months ago, I made this departure timetable, in the style of the Japanese ones, by reading the Port Jefferson branch timetable. I was able to use it as a quick reference while it was still current (only for the Fall of 2019), but doing this by hand as I did is error-prone and time consuming. The RESTful API is the first step for me to automate this process. In the not-too-distant future, I hope to have a webpage that allows users to create well formatted origin-destination timetables like the ones seen above. 
         </p>
 
     </body>

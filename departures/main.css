@@ -18,7 +18,7 @@ body {
 }
 
 p, code {
-    font-size: 14px;   
+    font-size: 16px;   
     margin: 24px auto;
 }
 
@@ -32,10 +32,16 @@ p, code {
 
 .right{
     float: right;
+    padding: 36px ; 
 }
 
 .left{
     float: left;
+    padding: 36px ; 
+}
+
+p.half{
+    width: 40%;
 }
 
 .margin{
@@ -89,7 +95,7 @@ h1, h2, h3, h4, h5, h6, .special {
 }
 
 .waltham{
-    max-width: 300px;
+    max-width: 400px;
 }
 
 .caption{
@@ -101,7 +107,8 @@ h2 {
 }
 
 a {
-    color: #0083e8;
+    /*color: #0064CC;*/
+    font-weight: bold;
 }
 
 b, strong {
@@ -120,6 +127,10 @@ img {
     display: block;
     margin: 1.3em auto;
     max-width: 95%;
+}
+
+.tt{
+    max-width: 45%;
 }
 
 figure{
