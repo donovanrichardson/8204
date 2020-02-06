@@ -42,9 +42,17 @@ reset = function() {
 // } actually, has to be a property and not part of the proto
 
 
+function maketitle(text){
+  var title = document.createElement("h1");
+  title.textContent = text;
+  title.style.textAlign = "center";
+  window.canvas.appendChild(title);
+}
 
 function fxn() {
   window.canvas = document.getElementById("root");
+  maketitle("Departures");
+  maketitle("Select Route");
   // getRoute.send();
   getRoute.data.forEach(route => {
     const rCard = document.createElement('div');
@@ -88,7 +96,9 @@ function fxn() {
 }
 
 showStops = function (json){
-  reset()
+  reset();
+  maketitle("Departures");
+  maketitle("Select Origin");
   json.forEach(stop => {
     const sCard = document.createElement('div');
     sCard.setAttribute('class', 'card');
@@ -125,6 +135,8 @@ showStops = function (json){
 
 showDests = function (json){
   reset();
+  maketitle("Departures");
+  maketitle("Select Destination");
   json.forEach(stop => {
     const sCard = document.createElement('div');
     sCard.setAttribute('class', 'card');
@@ -163,9 +175,11 @@ showTT = function(json){
   reset();
   var from = json.origin.stop_name;
   var to = json.destination.stop_name;
-  var theDate = json.date
   var table = document.createElement("table");
+  var p = document.createElement("p");
+  p.textContent = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation"
   window.canvas.appendChild(table);
+  window.canvas.appendChild(p);
   var title = document.createElement("tr");
   var titleContent = document.createElement("td");
   titleContent.colSpan=2;
