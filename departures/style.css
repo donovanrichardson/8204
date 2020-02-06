@@ -1,0 +1,47 @@
+#root {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    text-align:center;
+    margin: 1rem;
+    border: 1px solid gray;
+  }
+  
+  @media screen and (min-width: 600px) {
+    .card {
+       flex: 1 1 calc(50% - 2rem);
+    }
+  }
+  
+  @media screen and (min-width: 900px) {
+    .card {
+      flex: 1 1 calc(33% - 2rem);
+    }
+  }
+
+  .card:hover {
+    box-shadow: 2px 8px 45px rgba(0, 0, 0, .15);
+    transform: translate3D(0, -2px, 0);
+  }
+
+  .hour{
+    min-width: 90px;
+    text-align : center;
+    font-weight : bold;
+  }
+  
+  body{
+    font-family: "Trebuchet MS", "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Tahoma, sans-serif;
+    background-color: "FFC72C";
+  }
+  
+  .hour, .minute{
+    font-family: Lucida Console, monospace; 
+  }
