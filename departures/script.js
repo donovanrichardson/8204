@@ -229,14 +229,14 @@ showTT = function(json){
       var row = document.getElementById(tObj.h);
       row.children[1].textContent += `, ${tObj.m}`
     }
-    var footerRow = document.createElement("tr");
-    var footer = document.createElement("td");
-    footer.colSpan = 2;
-    footer.textContent = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation";
-    footer.style.fontSize = "14px";
-    table.appendChild(footerRow);
-    footerRow.appendChild(footer);
   })
+  var footerRow = document.createElement("tr");
+  var footer = document.createElement("td");
+  footer.colSpan = 2;
+  footer.textContent = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation";
+  footer.style.fontSize = "14px";
+  table.appendChild(footerRow);
+  footerRow.appendChild(footer);
 
 }
 
