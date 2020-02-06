@@ -46,7 +46,7 @@ function maketitle(text){
   var title = document.createElement("h1");
   title.textContent = text;
   title.style.textAlign = "center";
-  document.getElementById("root").insertBefore(window.canvas);
+  document.getElementById("root").insertBefore(title, window.canvas);
 }
 
 function fxn() {
