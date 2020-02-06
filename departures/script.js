@@ -182,8 +182,6 @@ showTT = function(json){
   var from = json.origin.stop_name;
   var to = json.destination.stop_name;
   var table = document.createElement("table");
-  var p = document.createElement("p");
-  p.textContent = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation"
   window.canvas.appendChild(table);
   window.canvas.appendChild(p);
   var title = document.createElement("tr");
@@ -232,6 +230,9 @@ showTT = function(json){
       var row = document.getElementById(tObj.h);
       row.children[1].textContent += `, ${tObj.m}`
     }
+    var footer = document.createElement("td");
+    footer.colSpan = 2;
+    footer.textContent = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation"
   })
 
 }
