@@ -46,11 +46,11 @@ function maketitle(text){
   var title = document.createElement("h1");
   title.textContent = text;
   title.style.textAlign = "center";
-  window.canvas.appendChild(title);
+  document.getElementById("root").appendChild(title);
 }
 
 function fxn() {
-  window.canvas = document.getElementById("root");
+  window.canvas = document.getElementById("container");
   maketitle("Departures");
   maketitle("Select Route");
   // getRoute.send();
