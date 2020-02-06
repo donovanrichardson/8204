@@ -183,7 +183,6 @@ showTT = function(json){
   var to = json.destination.stop_name;
   var table = document.createElement("table");
   window.canvas.appendChild(table);
-  window.canvas.appendChild(p);
   var title = document.createElement("tr");
   var titleContent = document.createElement("td");
   titleContent.colSpan=2;
