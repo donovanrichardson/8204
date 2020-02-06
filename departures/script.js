@@ -41,17 +41,19 @@ reset = function() {
 //     }
 // } actually, has to be a property and not part of the proto
 
+window.titles = [];
 
 function maketitle(text){
   var title = document.createElement("h1");
   title.textContent = text;
   title.style.textAlign = "center";
+  window.titles.push(title);
   document.getElementById("root").insertBefore(title, window.canvas);
 }
 
 function fxn() {
   window.canvas = document.getElementById("container");
-  maketitle("Departures");
+  maketitle("Timetable");
   maketitle("Select Route");
   // getRoute.send();
   getRoute.data.forEach(route => {
@@ -97,8 +99,7 @@ function fxn() {
 
 showStops = function (json){
   reset();
-  maketitle("Departures");
-  maketitle("Select Origin");
+  window.titles[1].textContent="Select Origin";
   json.forEach(stop => {
     const sCard = document.createElement('div');
     sCard.setAttribute('class', 'card');
@@ -135,8 +136,7 @@ showStops = function (json){
 
 showDests = function (json){
   reset();
-  maketitle("Departures");
-  maketitle("Select Destination");
+  window.titles[1].textContent="Select Destination";
   json.forEach(stop => {
     const sCard = document.createElement('div');
     sCard.setAttribute('class', 'card');
@@ -173,6 +173,9 @@ showDests = function (json){
 
 showTT = function(json){
   reset();
+  window.titles.forEach(wintitle =>{
+    document.getElementById("root").removeChild(wintitle);
+  })
   var from = json.origin.stop_name;
   var to = json.destination.stop_name;
   var table = document.createElement("table");
