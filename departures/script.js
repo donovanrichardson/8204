@@ -42,6 +42,9 @@ reset = function() {
 // } actually, has to be a property and not part of the proto
 
 window.titles = [];
+window.monthNames = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 function maketitle(text){
   var title = document.createElement("h1");
@@ -176,12 +179,13 @@ showDests = function (json){
 
 showTT = function(json){
   reset();
-  window.titles.forEach(wintitle =>{
-    document.getElementById("root").removeChild(wintitle);
+  document.getElementById("root").childNodes.forEach(cnode =>{
+    if (cnode.id != "form") {document.getElementById("root").removeChild(cnode);}
   })
   var from = json.origin.stop_name;
   var to = json.destination.stop_name;
   var table = document.createElement("table");
+  document.getElementById("root").appendChild(window.canvas);
   window.canvas.appendChild(table);
   var title = document.createElement("tr");
   var titleContent = document.createElement("td");
@@ -238,6 +242,35 @@ showTT = function(json){
   table.appendChild(footerRow);
   footerRow.appendChild(footer);
 
+  var form = document.getElementById("form");
+  form.style.display = "block";
+
+    var submit = document.getElementById("submit");
+    var select =  document.getElementById("select");
+      // var root = document.getElementById("root");
+
+      // submit.setAttribute("id", "submit");
+      // submit.setAttribute("type", "submit");
+      // submit.setAttribute("value", "Submit");
+
+      submit.addEventListener("click", function(){
+        day = document.getElementById("day").value;
+      month = select.selectedIndex;
+      year = document.getElementById("year").value;
+        if (day > 31 || day < 1 ){
+          alert("day must be in between 1 and 31")
+          return;
+        } else if (year > 9999 || year < 1){
+          alert("year must be in between 1 and 9999")
+          return;
+        } else{
+          window.todayDate = new Date(year, month, day);
+          window.getTT.open('GET', `https://deparch.herokuapp.com/boston/timetable?routeId=${window.routeId}&origin=${window.origin}&dest=${window.dest}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
+          window.getTT.send();
+        }
+      })
+
+
 }
 
 
@@ -251,11 +284,7 @@ function timecard(oneday){
 
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-  const monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
-return `${weekdays[oneday.getDay()]}, ${monthNames[oneday.getMonth()]} ${oneday.getDate()}, ${oneday.getFullYear()}`
+return `${weekdays[oneday.getDay()]}, ${window.monthNames[oneday.getMonth()]} ${oneday.getDate()}, ${oneday.getFullYear()}`
   // var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
   // var fulldatetime = weekdays[today.getDay()] +', ' + monthNames[today.getMonth()+1] + " " +today.getDate() +', ' + today.getFullYear() + "\n" + today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
 
