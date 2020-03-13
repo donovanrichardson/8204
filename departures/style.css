@@ -36,9 +36,11 @@
   }
 
   .hour{
-    min-width: 90px;
+    /* min-width: 90px; */
+    width: 25%;
     text-align : center;
     font-weight : bold;
+    font-size: x-large;
   }
   
   body{
