@@ -17,7 +17,7 @@ reset = function() {
 
   window.abbreviations = {"Amagansett":"AMG","Atlantic Terminal":"ATL","Babylon":"BAB","Cold Spring Harbor":"CSH","Far Rockaway":"FRK","Farmingdale":"FRM","Freeport":"FRE","Great Neck":"GRN","Greenport":"GPT","Hampton Bays":"HMB","Hempstead":"HEM","Hicksville":"HIC","Hunterspoint Avenue":"HPT","Huntington":"HTN","Jamaica":"JAM","Long Beach":"LBE","Long Island City":"LIC","Massapequa Park":"MPP","Mineola":"MIN","Montauk":"MTK","Oyster Bay":"OYS","Patchogue":"PAT","Penn Station":"PEN","Port Jefferson":"PTJ","Port Washington":"PTW","Ronkonkoma":"RON","Seaford":"SEA","Speonk":"SPE","Valley Stream":"VST","Wantagh":"WAN","West Hempstead":"WHE","Westhampton":"WHA","Yaphank":"YAP"}
   
-  getStops.open('GET', 'http://localhost:8080/lirr/stops', true);
+  getStops.open('GET', 'https://deparch.herokuapp.com/lirr/stops', true);
 
   getStops.onload = function(){
     this.data = JSON.parse(this.response);
@@ -159,7 +159,7 @@ reset = function() {
           showTT(this.data);
         // });
         }
-        req = `http://localhost:8080/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`
+        req = `https://deparch.herokuapp.com/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`
       wbCard = document.createElement('div');
       wbCard.setAttribute('class', 'card');
       wbCard.addEventListener("click", function(){ 
