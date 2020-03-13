@@ -137,22 +137,22 @@ reset = function() {
     // getTimetable = function(){   
     //     window.testamundo
     //     window.direction = num;
-    //     getTT = new XMLHttpRequest();
+    //     window.getTT = new XMLHttpRequest();
     //     window.todayDate = new Date()
-    //     getTT.open('GET', `localhost:8080/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
-    //     getTT.onload = function(){
+    //     window.getTT.open('GET', `localhost:8080/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
+    //     window.getTT.onload = function(){
     //       this.data = JSON.parse(this.response);
     //       console.log("received");
     //       console.log(this.data);
     //       showTT(this.data);
     //     // });
     //     }
-    //     getTT.send()
+    //     window.getTT.send()
     //   }
-    getTT = new XMLHttpRequest();
+    window.getTT = new XMLHttpRequest();
         window.todayDate = new Date()
         
-        getTT.onload = function(){
+        window.getTT.onload = function(){
           this.data = JSON.parse(this.response);
           console.log("received");
           console.log(this.data);
@@ -164,27 +164,27 @@ reset = function() {
       wbCard.setAttribute('class', 'card');
       wbCard.addEventListener("click", function(){ 
         
-        getTT.open('GET',req , true);
+        window.getTT.open('GET',req , true);
         window.direction = 1;
         
-        getTT.send()
+        window.getTT.send()
       });
       ebCard = document.createElement('div');
       ebCard.setAttribute('class', 'card');
       ebCard.addEventListener("click", function(){ 
-        getTT.open('GET', req, true);  
+        window.getTT.open('GET', req, true);  
         window.direction = 0;
-        // getTT = new XMLHttpRequest();
+        // window.getTT = new XMLHttpRequest();
         // window.todayDate = new Date()
-        // getTT.open('GET', `localhost:8080/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
-        // getTT.onload = function(){
+        // window.getTT.open('GET', `localhost:8080/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
+        // window.getTT.onload = function(){
         //   this.data = JSON.parse(this.response);
         //   console.log("received");
         //   console.log(this.data);
         //   showTT(this.data);
         // });
         
-        getTT.send()}
+        window.getTT.send()}
       );
 
       const hw = document.createElement('h1');
@@ -315,8 +315,8 @@ reset = function() {
             return;
           } else{
             window.todayDate = new Date(year, month, day);
-            getTT.open('GET', `https://deparch.herokuapp.com/boston/timetable?routeId=${window.routeId}&origin=${window.origin}&dest=${window.dest}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
-            getTT.send();
+            window.getTT.open('GET', `https://deparch.herokuapp.com/lirr/timetable?origin=${window.origin}&year=${window.todayDate.getFullYear()}&month=${window.todayDate.getMonth()+1}&date=${window.todayDate.getDate()}`, true);
+            window.getTT.send();
           }
         })
   
