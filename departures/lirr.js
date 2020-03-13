@@ -287,7 +287,7 @@ reset = function() {
     var footerRow = document.createElement("tr");
     var footer = document.createElement("td");
     footer.colSpan = 2;
-    footer.textContent = "Timetable created from GTFS data provided by the New York MTA. \n The author of this web app is not affiliated with the MTA.";
+    footer.innerHTML = "Timetable created from GTFS data provided by the New York MTA.<br>The author of this web app is not affiliated with the MTA.";
     footer.style.fontSize = "14px";
     table.appendChild(footerRow);
     footerRow.appendChild(footer);
