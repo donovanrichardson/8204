@@ -7,7 +7,7 @@ html {
 }
 
 body {
-    background: #fff;
+    background: #bbbbbb;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.06);
     color: #545454;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -18,8 +18,17 @@ body {
     padding: 2em 2em 4em;
 }
 
-p, h1, h2, div {
-    text-align: center     
+p, div td, th{
+    text-align: justify     
+}
+
+h1, h2 {
+    text-align: center
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
 }
 
 textarea {
@@ -39,9 +48,9 @@ h2 {
     margin-top: 1.3em;
 }
 
-a {
+/* a {
     color: #0083e8;
-}
+} */
 
 b, strong {
     font-weight: 600;
@@ -59,6 +68,7 @@ img {
     display: block;
     margin: 1.3em auto;
     max-width: 95%;
+    height: 200px
 }
 
 @keyframes colorize {
