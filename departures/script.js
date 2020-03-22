@@ -237,7 +237,7 @@ showTT = function(json){
   var footerRow = document.createElement("tr");
   var footer = document.createElement("td");
   footer.colSpan = 2;
-  footer.textContent = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation";
+  footer.innerHTML = "Timetable created from MBTA GTFS data provided by Massachusetts Department of Transportation<br>For latest schedule information, visit the <a href=\"https://www.mbta.com/\">MBTA website</a>.";
   footer.style.fontSize = "14px";
   table.appendChild(footerRow);
   footerRow.appendChild(footer);
