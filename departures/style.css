@@ -6,6 +6,10 @@
   #form{
     display: none;
   }
+
+  #loading{
+    text-align: center;
+  }
   
   .container {
     display: flex;

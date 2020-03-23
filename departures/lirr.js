@@ -101,6 +101,8 @@ reset = function() {
   showStops = function (){
     maketitle("Timetable");
     maketitle("Select Origin");
+    var loading = document.getElementById("loading");
+    loading.style.display = "none";
     var outer = document.getElementById('root'); 
     window.canvas = document.createElement('div');
     outer.appendChild(window.canvas);

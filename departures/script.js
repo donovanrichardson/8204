@@ -55,6 +55,8 @@ function maketitle(text){
 }
 
 function fxn() {
+  var loading = document.getElementById("loading");
+  loading.style.display = "none";
   var outer = document.getElementById('root'); 
   window.canvas = document.createElement('div');
   window.canvas.setAttribute('class', 'container');
