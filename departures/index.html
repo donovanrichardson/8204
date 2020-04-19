@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>DEPARTURES</title>
+        <meta name="description" content="Donovan Richardson">
+        <meta http-equiv="Refresh" content="0; url=index.html" />
+        <link rel="stylesheet" href="index.css">
+        <script src="source.js"></script>
+    </head>
+    
+    <body>
+
+        <!--        centred-->
+        <h1>DEPARTURES</h1> 
+        
+        <h2>
+            <a href='boston.html'> BOSTON TIMETABLE GENERATOR </a> <br>
+            <a href='lirr.html'> LIRR TIMETABLE GENERATOR </a> <br>
+            <a href='https://gitlab.com/donovanrichardson/deparch-api'> REPOSITORY </a> <br>
+        </h2>
+
+        <p>
+            When I did an internship in rural Japan a few years ago, I noticed that every train station had large departure timetables posted, providing a widely accessible way to check what time a train will come. These timetables are usually formatted so that the hour of departure appears on the left-hand side while the minutes of individual departures appear on the right-hand side. Recently, I realized that I could use GTFS to recreate this format for all the stations a whole transit agency, and so I've published the two timetable generators above.
+        </p>
+        <a href='boston.html'> <img src="boston-preview.png" alt="Boston timetable preview"> </a> <br>
+        <p>
+            The Boston and LIRR generators work slightly differently. For Boston, you will be asked to select a transit route, such as the 1 bus, the Green Line D branch, the Hingham/Hull Ferry, or the Providence/Stougton Line. Then you will be asked for to select the origin and destination stations. The following page will provide a timetable of departures for trips on the selected route between the selected origin and destination.
+        </p>
+        <a href='lirr.html'> <img src="lirr-preview.png" alt="Long Island Rail Road timetable preview"> </a> <br>
+        <p>
+            For the LIRR generator, you will be asked only for the origin station and whether you want to go eastbound or westbound. The departures timetable generated will also contain a three letter abbreviation indicating the trip's terminal station.
+        </p>
+        <p>
+            Note that the Far Rockaway Branch indicates service towards the city terminals as being westbound and service towards Far Rockaway as being eastbound, though the actual direction of rail traffic is reversed relative to this from Valley Stream to Far Rockaway.
+        </p>
+        
+        <table>
+            <tr><th colspan="2">Station Abbreviations for LIRR Timetable Generator</td></tr>
+            <tr><th>ABBREV</th><th>Station Name</th></tr>
+            <tr><td>AMG</td><td>Amagansett</td></tr>
+            <tr><td>ATL</td><td>Atlantic Terminal</td></tr>
+            <tr><td>BAB</td><td>Babylon</td></tr>
+            <tr><td>CSH</td><td>Cold Spring Harbor</td></tr>
+            <tr><td>FRE</td><td>Freeport</td></tr>
+            <tr><td>FRK</td><td>Far Rockaway</td></tr>
+            <tr><td>FRM</td><td>Farmingdale</td></tr>
+            <tr><td>GPT</td><td>Greenport</td></tr>
+            <tr><td>GRN</td><td>Great Neck</td></tr>
+            <tr><td>HEM</td><td>Hempstead</td></tr>
+            <tr><td>HIC</td><td>Hicksville</td></tr>
+            <tr><td>HMB</td><td>Hampton Bays</td></tr>
+            <tr><td>HPT</td><td>Hunterspoint Avenue</td></tr>
+            <tr><td>HTN</td><td>Huntington</td></tr>
+            <tr><td>JAM</td><td>Jamaica</td></tr>
+            <tr><td>LBE</td><td>Long Beach</td></tr> <!-- if you want to split table into two, make new column starting with LIC.-->
+            <tr><td>LIC</td><td>Long Island City</td></tr>
+            <tr><td>MIN</td><td>Mineola</td></tr>
+            <tr><td>MPP</td><td>Massapequa Park</td></tr>
+            <tr><td>MTK</td><td>Montauk</td></tr>
+            <tr><td>OYS</td><td>Oyster Bay</td></tr>
+            <tr><td>PAT</td><td>Patchogue</td></tr>
+            <tr><td>PEN</td><td>Penn Station</td></tr>
+            <tr><td>PTJ</td><td>Port Jefferson</td></tr>
+            <tr><td>PTW</td><td>Port Washington</td></tr>
+            <tr><td>RON</td><td>Ronkonkoma</td></tr>
+            <tr><td>SEA</td><td>Seaford</td></tr>
+            <tr><td>SPE</td><td>Speonk</td></tr>
+            <tr><td>VST</td><td>Valley Stream</td></tr>
+            <tr><td>WAN</td><td>Wantagh</td></tr>
+            <tr><td>WHA</td><td>Westhampton</td></tr>
+            <tr><td>WHE</td><td>West Hempstead</td></tr>
+            <tr><td>YAP</td><td>Yaphank</td></tr>
+        </table>
+        
+    </body>
+</html>
