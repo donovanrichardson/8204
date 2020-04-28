@@ -105,6 +105,7 @@ reset = function() {
     loading.style.display = "none";
     var outer = document.getElementById('root'); 
     window.canvas = document.createElement('div');
+    window.canvas.setAttribute('class', 'container');
     outer.appendChild(window.canvas);
     reset();
     // window.titles[1].textContent="Select Origin";
