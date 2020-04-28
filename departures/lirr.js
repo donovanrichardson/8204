@@ -119,7 +119,7 @@ reset = function() {
   
       const h1 = document.createElement('h1');
       h1.textContent = stop.stop_name;
-      // h1.style.backgroundColor = route.route_color; //hmm, this is not working, figur it out later.
+      h1.style.backgroundColor = "#0039A644"; 
       // h1.style.textColor = route.route_text_color;
   
       // const p = document.createElement('p');
