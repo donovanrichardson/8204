@@ -61,6 +61,10 @@ img {
     max-width: 95%;
 }
 
+img#me{
+    width:150px;
+}
+
 @keyframes colorize {
     0% {
         -webkit-filter: grayscale(100%);
