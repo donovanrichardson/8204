@@ -104,7 +104,7 @@ public class AppController implements GTFSController {
                         continue;
                     }
                 }
-//                this.dsl.update(FEED).set()
+                this.dsl.update(FEED).set(FEED.LATEST, versionId).where(FEED.ID.eq(feedId));
             } catch (IOException e){
                 this.dsl.deleteFrom(FEED_VERSION).where(FEED_VERSION.ID.eq(versionId)).execute();
                 e.printStackTrace();

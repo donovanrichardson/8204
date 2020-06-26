@@ -40,7 +40,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Feed extends TableImpl<FeedRecord> {
 
-    private static final long serialVersionUID = -1195161650;
+    private static final long serialVersionUID = -1982745600;
 
     /**
      * The reference instance of <code>gtfs.feed</code>
@@ -74,6 +74,11 @@ public class Feed extends TableImpl<FeedRecord> {
      * The column <code>gtfs.feed.location</code>.
      */
     public final TableField<FeedRecord, Integer> LOCATION = createField("location", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+
+    /**
+     * The column <code>gtfs.feed.latest</code>.
+     */
+    public final TableField<FeedRecord, String> LATEST = createField("latest", org.jooq.impl.SQLDataType.VARCHAR(255), this, "");
 
     /**
      * Create a <code>gtfs.feed</code> table reference
