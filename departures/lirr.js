@@ -52,7 +52,9 @@ reset = function() {
     window.canvas = document.createElement('div');
     window.canvas.setAttribute('class', 'container');
     outer.appendChild(window.canvas);
-    maketitle("Timetable");
+    maketitle("Time
+    
+    ");
     maketitle("Select Origin");
     // getRoute.send();
     getStops.data.forEach(stop => {
@@ -209,6 +211,7 @@ reset = function() {
     })
     var from = json.origin.stop_name;
     var table = document.createElement("table");
+    table.setAttribute('id','root-table')
     document.getElementById("root").appendChild(window.canvas);
     window.canvas.appendChild(table);
     var title = document.createElement("tr");
