@@ -55,3 +55,7 @@
   .hour, .minute{
     font-family: Lucida Console, monospace; 
   }
+
+table{
+  margin: 0 auto;
+}
